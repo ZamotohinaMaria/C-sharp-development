@@ -1,23 +1,28 @@
+using AirlineCompany.Domain.Models;
+using AirlineCompany.Domain.Repositories.ByList;
+using AirlineCompany.Domain.Interfaces;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<IRepository<Plane, int>, PlaneRepositoryList>();
+builder.Services.AddSingleton<IRepository<AirFlight, int>, AirFlightRepositoryList>();
+builder.Services.AddSingleton<IRepository<Passeneger, int>, PassengerRepositoryList>();
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    // app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Airline Company API v1");
-    });
+    app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
 

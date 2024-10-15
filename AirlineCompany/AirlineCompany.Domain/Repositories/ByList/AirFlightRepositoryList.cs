@@ -7,7 +7,7 @@ namespace AirlineCompany.Domain.Repositories.ByList;
 public class AirFlightRepositoryList : IRepository<AirFlight, int>
 {
     private static readonly List<AirFlight> _flights = FileRreader.ReadAirFlights("Data/airflyights.csv");
-
+     
     public List<AirFlight> GetAll()
     {
         return _flights;
