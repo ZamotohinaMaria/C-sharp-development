@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Include="..\AirlineCompany.Tests\FileRreader.cs" Link="FileRreader.cs" />
+  </ItemGroup>
+
 </Project>

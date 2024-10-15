@@ -1,4 +1,4 @@
-﻿namespace AirlineCompany.Domain;
+﻿namespace AirlineCompany.Domain.Models;
 /// <summary>
 /// Класс описывает информацию о пассажире
 /// </summary>

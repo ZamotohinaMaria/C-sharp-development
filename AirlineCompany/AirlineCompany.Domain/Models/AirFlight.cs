@@ -1,4 +1,4 @@
-﻿namespace AirlineCompany.Domain;
+﻿namespace AirlineCompany.Domain.Models;
 /// <summary>
 /// Класс описывает 1 полет какого-либо самолета
 /// </summary>

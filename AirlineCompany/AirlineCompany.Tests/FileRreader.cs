@@ -1,4 +1,4 @@
-﻿using AirlineCompany.Domain;
+﻿using AirlineCompany.Domain.Models;
 using System.Globalization;
 
 namespace AirlineCompany.Tests;
