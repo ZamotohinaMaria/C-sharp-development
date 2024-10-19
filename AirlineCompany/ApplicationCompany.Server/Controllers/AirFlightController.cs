@@ -47,6 +47,7 @@ public class AirFlightController(IRepository<AirFlight, int> repository, IMapper
     public IActionResult Put(int id, [FromBody] AirFlightDto newItem)
     {
         FlightServer service = new(newItem, mapper);
+
         var flight = service.GetAirFlight();
         flight.Idflight = id;
 

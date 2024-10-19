@@ -42,7 +42,14 @@ public class AirFlightRepositoryList : IRepository<AirFlight, int>
         var item_id = _flights.FindIndex(p => p.Idflight == id);
         if (item_id == -1)
             return false;
-        _flights[item_id] = newValue;
+        _flights[item_id].Idflight = newValue.Idflight;
+        _flights[item_id].CodeNumber = newValue.CodeNumber;
+        _flights[item_id].DeparturePoint = newValue.DeparturePoint;
+        _flights[item_id].ArrivalPoint = newValue.ArrivalPoint;
+        _flights[item_id].Departure = newValue.Departure;
+        _flights[item_id].Arrive = newValue.Arrive;
+        _flights[item_id].FlyingTime = newValue.FlyingTime;
+        _flights[item_id].PlaneType = newValue.PlaneType;
         return true;
     }
 }

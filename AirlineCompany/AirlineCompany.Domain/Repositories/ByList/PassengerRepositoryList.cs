@@ -43,7 +43,13 @@ public class PassengerRepositoryList : IRepository<Passeneger, int>
         var item_id = _passengres.FindIndex(p => p.IdPassenger == id);
         if (item_id == -1)
             return false;
-        _passengres[item_id] = newValue;
+        _passengres[item_id].IdFlight = newValue.IdFlight;
+        _passengres[item_id].FullName = newValue.FullName;
+        _passengres[item_id].Passport = newValue.Passport;
+        _passengres[item_id].Registration = newValue.Registration;
+        _passengres[item_id].SeatNumber = newValue.SeatNumber;
+        _passengres[item_id].BaggageWeight = newValue.BaggageWeight;
+        _passengres[item_id].IdFlight = newValue.IdFlight;
         return true;
     }
 }

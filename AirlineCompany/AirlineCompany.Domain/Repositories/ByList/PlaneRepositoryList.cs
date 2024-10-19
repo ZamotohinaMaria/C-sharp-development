@@ -43,7 +43,11 @@ public class PlaneRepositoryList: IRepository<Plane, int>
         var item_id = _planes.FindIndex(p => p.IdPlane == id);
         if (item_id == -1)
             return false;
-        _planes[item_id] = newValue;
+        _planes[item_id].IdPlane = newValue.IdPlane;
+        _planes[item_id].Model = newValue.Model;
+        _planes[item_id].LoadCapacity = newValue.LoadCapacity;
+        _planes[item_id].Efficiency = newValue.Efficiency;
+        _planes[item_id].PassengerMax = newValue.PassengerMax;
         return true;
     }
 }
