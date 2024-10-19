@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirlineCompany.Domain", "Ai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirlineCompany.Tests", "AirlineCompany.Tests\AirlineCompany.Tests.csproj", "{9DEFAAE7-EFA7-4BBA-BD3A-04DAF2208109}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationCompany.Server", "ApplicationCompany.Server\ApplicationCompany.Server.csproj", "{7B371593-8A28-4DD5-98FC-F8A21CADB53D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirlineCompany.Server", "ApplicationCompany.Server\AirlineCompany.Server.csproj", "{7B371593-8A28-4DD5-98FC-F8A21CADB53D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0EFFFD03-718C-45A7-AF85-5B2E30589EA2} = {0EFFFD03-718C-45A7-AF85-5B2E30589EA2}
 	EndProjectSection
@@ -15,6 +15,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8358E67F-7722-4A72-8E40-A439B31F6D4B}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirlineCompany.ApplicationServices", "AirlineCompany.ApplicationServices\AirlineCompany.ApplicationServices.csproj", "{6F5AB098-37E2-4330-A36C-1F0E3117157B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0EFFFD03-718C-45A7-AF85-5B2E30589EA2} = {0EFFFD03-718C-45A7-AF85-5B2E30589EA2}
 	EndProjectSection
 EndProject
 Global
@@ -35,6 +40,10 @@ Global
 		{7B371593-8A28-4DD5-98FC-F8A21CADB53D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B371593-8A28-4DD5-98FC-F8A21CADB53D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B371593-8A28-4DD5-98FC-F8A21CADB53D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F5AB098-37E2-4330-A36C-1F0E3117157B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F5AB098-37E2-4330-A36C-1F0E3117157B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F5AB098-37E2-4330-A36C-1F0E3117157B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F5AB098-37E2-4330-A36C-1F0E3117157B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

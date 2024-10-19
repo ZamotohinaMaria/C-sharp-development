@@ -20,6 +20,7 @@ public class PlaneRepositoryList: IRepository<Plane, int>
 
     public void Add(Plane newItem)
     {
+        newItem.IdPlane = _planes.Count;
         _planes.Add(newItem);
     }
 
@@ -29,6 +30,9 @@ public class PlaneRepositoryList: IRepository<Plane, int>
 
         if (plane == null)
             return false;
+
+        for (var i = id + 1; i < _planes.Count; i++)
+            _planes[i].IdPlane = i - 1;
 
         _planes.Remove(plane);
         return true;

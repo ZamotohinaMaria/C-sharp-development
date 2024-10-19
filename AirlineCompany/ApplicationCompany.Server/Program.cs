@@ -2,6 +2,9 @@ using AirlineCompany.Domain.Models;
 using AirlineCompany.Domain.Repositories.ByList;
 using AirlineCompany.Domain.Interfaces;
 
+using AutoMapper.Configuration;
+using AirlineCompany.ApplicationServices;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,7 @@ builder.Services.AddSingleton<IRepository<Plane, int>, PlaneRepositoryList>();
 builder.Services.AddSingleton<IRepository<AirFlight, int>, AirFlightRepositoryList>();
 builder.Services.AddSingleton<IRepository<Passeneger, int>, PassengerRepositoryList>();
 
+builder.Services.AddAutoMapper(typeof(Mapper));
 
 var app = builder.Build();
 

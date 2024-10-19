@@ -1,13 +1,17 @@
 ﻿using AirlineCompany.Domain.Interfaces;
 using AirlineCompany.Domain.Models;
 using AirlineCompany.Domain.Repositories.ByList;
+using AirlineCompany.ApplicationServices.DTO;
+using AirlineCompany.Server;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using AirlineCompany.ApplicationServices;
 
-namespace ApplicationCompany.Server.Controllers;
+namespace AirlineCompany.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AirFlightController(IRepository<AirFlight, int> repository) : ControllerBase
+public class AirFlightController(IRepository<AirFlight, int> repository, IMapper mapper) : ControllerBase
 {
     // GET: api/<AirFlightController>
     [HttpGet]
@@ -30,17 +34,23 @@ public class AirFlightController(IRepository<AirFlight, int> repository) : Contr
 
     // POST api/<AirFlightController>
     [HttpPost]
-    public IActionResult Post([FromBody] AirFlight item)
+    public IActionResult Post([FromBody] AirFlightDto item)
     {
-        repository.Add(item);
+        FlightServer service = new(item, mapper);
+        var flight = service.GetAirFlight();
+        repository.Add(flight);
         return Ok();
     }
 
     // PUT api/<AirFlightController>/5
     [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] AirFlight newItem)
+    public IActionResult Put(int id, [FromBody] AirFlightDto newItem)
     {
-        if (!repository.Update(id, newItem))
+        FlightServer service = new(newItem, mapper);
+        var flight = service.GetAirFlight();
+        flight.Idflight = id;
+
+        if (!repository.Update(id, flight))
             return NotFound();
         return Ok();
     }

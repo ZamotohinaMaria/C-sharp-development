@@ -1,13 +1,15 @@
 using AirlineCompany.Domain.Interfaces;
 using AirlineCompany.Domain.Models;
 using AirlineCompany.Domain.Repositories.ByList;
+using AirlineCompany.ApplicationServices.DTO;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ApplicationCompany.Server.Controllers;
+namespace AirlineCompany.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PlaneController(IRepository<Plane, int> repository) : ControllerBase
+public class PlaneController(IRepository<Plane, int> repository, IMapper mapper) : ControllerBase
 {
     [HttpGet]
     public ActionResult<IEnumerable<Plane>> Get()
@@ -27,16 +29,19 @@ public class PlaneController(IRepository<Plane, int> repository) : ControllerBas
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] Plane item)
+    public IActionResult Post([FromBody] PlaneDto item)
     {
-        repository.Add(item);
+        var plane = mapper.Map<Plane>(item);
+        repository.Add(plane);
         return Ok();
     }
 
     [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] Plane newItem)
+    public IActionResult Put(int id, [FromBody] PlaneDto newItem)
     {
-        if (!repository.Update(id, newItem))
+        var plane = mapper.Map<Plane>(newItem);
+        plane.IdPlane = id;
+        if (!repository.Update(id, plane))
             return NotFound();
         return Ok();
     }

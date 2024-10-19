@@ -20,6 +20,7 @@ public class PassengerRepositoryList : IRepository<Passeneger, int>
 
     public void Add(Passeneger newItem)
     {
+        newItem.IdPassenger = _passengres.Count;
         _passengres.Add(newItem);
     }
 
@@ -29,7 +30,10 @@ public class PassengerRepositoryList : IRepository<Passeneger, int>
         
         if (passenger == null) 
             return false;
-        
+
+        for (var i = id + 1; i < _passengres.Count; i++)
+            _passengres[i].IdPassenger = i - 1;
+
         _passengres.Remove(passenger);
         return true;
     }

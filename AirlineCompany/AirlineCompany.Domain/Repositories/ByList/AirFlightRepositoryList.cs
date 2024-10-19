@@ -7,7 +7,6 @@ namespace AirlineCompany.Domain.Repositories.ByList;
 public class AirFlightRepositoryList : IRepository<AirFlight, int>
 {
     private static readonly List<AirFlight> _flights = FileRreader.ReadAirFlights("Data/airflyights.csv");
-     
     public List<AirFlight> GetAll()
     {
         return _flights;
@@ -20,6 +19,7 @@ public class AirFlightRepositoryList : IRepository<AirFlight, int>
 
     public void Add(AirFlight newItem)
     {
+        newItem.Idflight = _flights.Count;
         _flights.Add(newItem);
     }
 
@@ -29,6 +29,9 @@ public class AirFlightRepositoryList : IRepository<AirFlight, int>
 
         if (flight == null)
             return false;
+
+        for (var i = id + 1; i < _flights.Count; i++)
+            _flights[i].Idflight = i - 1;
 
         _flights.Remove(flight);
         return true;
