@@ -8,18 +8,30 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AirlineCompany.Server.Controllers;
 
+/// <summary>
+/// Класс для работы с данными пассажиров из формы
+/// </summary>
+/// <param name="repository"></param>
+/// <param name="mapper"></param>
 [Route("api/[controller]")]
 [ApiController]
 public class PassengerController(IRepository<Passeneger, int> repository, IMapper mapper) : ControllerBase
 {
-    // GET: api/<PassengerController>
+    /// <summary>
+    /// Вернуть всех пассажиров
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public ActionResult<IEnumerable<Passeneger>> Get()
     {
         return Ok(repository.GetAll());
     }
 
-    // GET api/<PassengerController>/5
+    /// <summary>
+    /// Вернуть пассажира по id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public ActionResult<Passeneger> Get(int id)
     {
@@ -31,7 +43,11 @@ public class PassengerController(IRepository<Passeneger, int> repository, IMappe
         return Ok(passenger);
     }
 
-    // POST api/<PassengerController>
+    /// <summary>
+    /// Добавить пассажира
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
     [HttpPost]
     public IActionResult Post([FromBody] PassengerDto item)
     {
@@ -40,7 +56,12 @@ public class PassengerController(IRepository<Passeneger, int> repository, IMappe
         return Ok();
     }
 
-    // PUT api/<PassengerController>/5
+    /// <summary>
+    /// Удалить пассажира по id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="newItem"></param>
+    /// <returns></returns>
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] PassengerDto newItem)
     {
@@ -51,7 +72,11 @@ public class PassengerController(IRepository<Passeneger, int> repository, IMappe
         return Ok();
     }
 
-    // DELETE api/<PassengerController>/5
+    /// <summary>
+    /// Изменить пассажира по id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {

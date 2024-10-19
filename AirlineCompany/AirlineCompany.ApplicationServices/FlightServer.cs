@@ -6,8 +6,18 @@ using AirlineCompany.Domain.Repositories.ByList;
 using AutoMapper;
 
 namespace AirlineCompany.ApplicationServices;
+
+/// <summary>
+/// Класс необходим для корректного преобразовния данных с формы в объекты классов
+/// </summary>
+/// <param name="item"></param>
+/// <param name="mapper"></param>
 public class FlightServer(AirFlightDto item, IMapper mapper)
 {
+    /// <summary>
+    /// Метод возвращает корректый объект класса "Полеты" со всеми заполненными полями
+    /// </summary>
+    /// <returns>AirFlights flight</returns>
     public AirFlight GetAirFlight()
     {
         var flight = mapper.Map<AirFlight>(item);

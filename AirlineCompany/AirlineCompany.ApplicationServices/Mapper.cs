@@ -4,8 +4,12 @@ using AutoMapper;
 using System.Runtime.CompilerServices;
 
 namespace AirlineCompany.ApplicationServices;
+
 public class Mapper : Profile
 {
+    /// <summary>
+    /// Метод для преобразования данных с формы в данные в объекты классов
+    /// </summary>
     public Mapper()
     {
         CreateMap<AirFlight, AirFlightDto>().ReverseMap();

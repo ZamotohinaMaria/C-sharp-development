@@ -1,5 +1,8 @@
 ﻿namespace AirlineCompany.ApplicationServices.DTO;
 
+/// <summary>
+/// Класс описывает данные формы для создания объекта класса Пассажиры
+/// </summary>
 public class PassengerDto
 {
     /// <summary>

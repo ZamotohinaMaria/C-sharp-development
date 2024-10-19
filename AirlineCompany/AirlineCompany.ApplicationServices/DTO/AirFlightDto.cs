@@ -1,4 +1,8 @@
 ﻿namespace AirlineCompany.ApplicationServices.DTO;
+
+/// <summary>
+/// Класс описывает данные формы для создания объекта класса Полеты
+/// </summary>
 public class AirFlightDto
 {
     /// <summary>

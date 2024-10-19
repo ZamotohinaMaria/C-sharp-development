@@ -9,6 +9,11 @@ namespace AirlineCompany.Tests;
 /// <param name="fileName"></param>
 static class FileRreader
 {
+    /// <summary>
+    /// Получение списка полетов из файла
+    /// </summary>
+    /// <param name="filename"></param>
+    /// <returns></returns>
     public static List<AirFlight> ReadAirFlights(string filename)
     {
         using var reader = new StreamReader(filename);
@@ -41,6 +46,11 @@ static class FileRreader
         return airFlights;
     }
 
+    /// <summary>
+    /// Получение списка пассаиров из файла
+    /// </summary>
+    /// <param name="filename"></param>
+    /// <returns></returns>
     public static List<Passeneger> ReadPassengers(string filename)
     {
         using var reader = new StreamReader(filename);
@@ -74,6 +84,11 @@ static class FileRreader
         return passengers;
     }
 
+    /// <summary>
+    /// Получение списка самолетов из файла
+    /// </summary>
+    /// <param name="filename"></param>
+    /// <returns></returns>
     public static List<Plane> ReadPlanes(string filename)
     {
         using var reader = new StreamReader(filename);

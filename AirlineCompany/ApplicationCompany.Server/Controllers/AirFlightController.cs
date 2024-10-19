@@ -9,18 +9,33 @@ using AirlineCompany.ApplicationServices;
 
 namespace AirlineCompany.Server.Controllers;
 
+
+/// <summary>
+/// Класс для работы с данными полетов из формы
+/// </summary>
+/// <param name="repository"></param>
+/// <param name="mapper"></param>
 [Route("api/[controller]")]
 [ApiController]
 public class AirFlightController(IRepository<AirFlight, int> repository, IMapper mapper) : ControllerBase
 {
-    // GET: api/<AirFlightController>
+
+    /// <summary>
+    /// Вернуть все полеты
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public ActionResult<IEnumerable<AirFlight>> Get()
     {
         return Ok(repository.GetAll());
     }
 
-    // GET api/<AirFlightController>/5
+
+    /// <summary>
+    /// Вернуть полет по id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public ActionResult<AirFlight> Get(int id)
     {
@@ -32,7 +47,11 @@ public class AirFlightController(IRepository<AirFlight, int> repository, IMapper
         return Ok(flight);
     }
 
-    // POST api/<AirFlightController>
+    /// <summary>
+    /// Добавить полет
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
     [HttpPost]
     public IActionResult Post([FromBody] AirFlightDto item)
     {
@@ -42,7 +61,12 @@ public class AirFlightController(IRepository<AirFlight, int> repository, IMapper
         return Ok();
     }
 
-    // PUT api/<AirFlightController>/5
+    /// <summary>
+    /// Удалить полет по id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="newItem"></param>
+    /// <returns></returns>
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] AirFlightDto newItem)
     {
@@ -56,7 +80,11 @@ public class AirFlightController(IRepository<AirFlight, int> repository, IMapper
         return Ok();
     }
 
-    // DELETE api/<AirFlightController>/5
+    /// <summary>
+    /// Изменить полет по id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     public IActionResult Delete(int id)
     {
