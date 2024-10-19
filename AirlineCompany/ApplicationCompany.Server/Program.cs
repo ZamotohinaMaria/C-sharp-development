@@ -4,6 +4,8 @@ using AirlineCompany.Domain.Interfaces;
 
 using AutoMapper.Configuration;
 using AirlineCompany.ApplicationServices;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,8 +18,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IRepository<Plane, int>, PlaneRepositoryList>();
 builder.Services.AddSingleton<IRepository<AirFlight, int>, AirFlightRepositoryList>();
 builder.Services.AddSingleton<IRepository<Passeneger, int>, PassengerRepositoryList>();
+builder.Services.AddTransient<RequestRepository>();
 
 builder.Services.AddAutoMapper(typeof(Mapper));
+
 
 var app = builder.Build();
 

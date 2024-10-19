@@ -1,11 +1,9 @@
-﻿using AirlineCompany.Domain.Interfaces;
-using AirlineCompany.Domain.Models;
-using AirlineCompany.Domain.Repositories.ByList;
+﻿using AirlineCompany.ApplicationServices;
 using AirlineCompany.ApplicationServices.DTO;
-using AirlineCompany.Server;
+using AirlineCompany.Domain.Interfaces;
+using AirlineCompany.Domain.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using AirlineCompany.ApplicationServices;
 
 namespace AirlineCompany.Server.Controllers;
 
