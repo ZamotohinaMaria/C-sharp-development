@@ -1,4 +1,5 @@
 ﻿using AirlineCompany.Domain.Models;
+using AirlineCompany.Domain;
 
 namespace AirlineCompany.Tests;
 /// <summary>

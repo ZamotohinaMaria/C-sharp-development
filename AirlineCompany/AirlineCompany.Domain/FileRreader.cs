@@ -1,19 +1,21 @@
 ﻿using AirlineCompany.Domain.Models;
 using System.Globalization;
 
-namespace AirlineCompany.Tests;
+namespace AirlineCompany.Domain;
 
 /// <summary>
 /// Читает данные из файлов
 /// </summary>
 /// <param name="fileName"></param>
-static class FileRreader
+public static class FileRreader
 {
     /// <summary>
     /// Получение списка полетов из файла
     /// </summary>
     /// <param name="filename"></param>
     /// <returns></returns>
+    
+    private static List<Plane> _planes = FileRreader.ReadPlanes("Data/planes.csv");
     public static List<AirFlight> ReadAirFlights(string filename)
     {
         using var reader = new StreamReader(filename);
@@ -28,7 +30,7 @@ static class FileRreader
             var tokens = airLine.Split(';');
 
             tokens = tokens.Select(token => token.Trim('"')).ToArray();
-
+            var plane = _planes.Find(p => p.Model == tokens[6]);
             var flight = new AirFlight
             {
                 Idflight = flyId++,
@@ -38,7 +40,7 @@ static class FileRreader
                 Departure = DateTime.ParseExact(tokens[3], "yyyy-MM-dd HH:m:s", CultureInfo.InvariantCulture),
                 Arrive = DateTime.Parse(tokens[4]),
                 FlyingTime = TimeOnly.Parse(tokens[5]),
-                PlaneType = tokens[6]
+                PlaneType = plane ?? new Plane { IdPlane = _planes.Count, Efficiency = 0, LoadCapacity = 0, Model = "none", PassengerMax = 0 }
             };
 
             airFlights.Add(flight);

@@ -57,7 +57,7 @@ public class PassengerController(IRepository<Passeneger, int> repository, IMappe
     }
 
     /// <summary>
-    /// Удалить пассажира по id
+    /// Изменить пассажира по id
     /// </summary>
     /// <param name="id"></param>
     /// <param name="newItem"></param>
@@ -66,14 +66,14 @@ public class PassengerController(IRepository<Passeneger, int> repository, IMappe
     public IActionResult Put(int id, [FromBody] PassengerDto newItem)
     {
         var passenger = mapper.Map<Passeneger>(newItem);
-        passenger.IdFlight = id;
+
         if (!repository.Update(id, passenger))
             return NotFound();
         return Ok();
     }
 
     /// <summary>
-    /// Изменить пассажира по id
+    /// Удалить пассажира по id
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

@@ -1,10 +1,11 @@
 ﻿using AirlineCompany.Domain.Interfaces;
 using AirlineCompany.Domain.Models;
-using AirlineCompany.Tests;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AirlineCompany.Domain.Repositories.ByList;
 
+/// <summary>
+/// Класс предоставляет методы, которые реализуют основыне запросы по заданию
+/// </summary>
 public class RequestRepository
 {
     private static readonly List<AirFlight> _flights = FileRreader.ReadAirFlights("Data/airflyights.csv");
@@ -15,12 +16,9 @@ public class RequestRepository
     /// 1) Вывести сведения о всех авиарейсах, вылетевших из указанного пункта отправления
     ///  в указанный пункт прибытия.
     /// </summary>
-    /// <returns></returns>
-    public List<AirFlight> GetFlyightDepartureArrive()
+    /// <returns>Список элементов класса AirFlight</returns>
+    public List<AirFlight> GetFlyightDepartureArrive(string departure, string arrive)
     {
-        var departure = "Tokio";
-        var arrive = "Dublin";
-
         var flyightDepartureArrive =
             (from fly in _flights
              where fly.DeparturePoint == departure && fly.ArrivalPoint == arrive
@@ -33,12 +31,10 @@ public class RequestRepository
     /// 2) Вывести сведения обо всех пассажирах, летящих данным рейсом,
     /// вес багажа которых равен нулю, упорядочить по ФИО.
     /// </summary>
-    /// <returns></returns>
-    public List<Passeneger> GetPassenegersWeightFlight()
+    /// <returns>Список элементов класса Passeneger</returns>
+    public List<Passeneger> GetPassenegersWeightFlight(int idFlight)
     {
-        var idFlight = 4;
-
-        var passenegersWeightFlight =
+         var passenegersWeightFlight =
             (from pass in _passengers
              orderby pass.FullName descending
              where pass.IdFlight == idFlight && pass.BaggageWeight == 0
@@ -52,16 +48,12 @@ public class RequestRepository
     /// 3) Вывести сводную информацию обо всех полетах самолетов данного типа
     /// в указанный период времени.
     /// </summary>
-    /// <returns></returns>
-    public List<AirFlight> GetFlyightPassengersDate()
+    /// <returns>Список элементов класса AirFlight</returns>
+    public List<AirFlight> GetFlyightPassengersDate(string planeModel, DateTime departure, DateTime arrive)
     {
-        var planeModel = "Panda 202208";
-        var departure = new DateTime(2024, 9, 1);
-        var arrive = new DateTime(2024, 11, 30);
-
         var flyightPassengersDate =
             (from fly in _flights
-             where fly.PlaneType == planeModel &&
+             where fly.PlaneType.Model == planeModel &&
              fly.Departure >= departure &&
              fly.Departure <= arrive
              select fly).ToList();
@@ -73,7 +65,7 @@ public class RequestRepository
     /// <summary>
     /// 4) Вывести топ 5 авиарейсов по количеству перевезённых пассажиров.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Список элементов класса AirFlightNumberPassangers</returns>
     public List<AirFlightNumberPassangers> GetFlyightTopPassengers()
     {
         var flyightTopPassengers =
@@ -104,7 +96,7 @@ public class RequestRepository
     /// <summary>
     /// 5) Вывести список рейсов с минимальным временем в пути.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Список элементов класса AirFlight</returns>
     public List<AirFlight> GetFlyightMinTime()
     {
         var flyightMinTime =
@@ -121,7 +113,7 @@ public class RequestRepository
     /// 6) Вывести информацию о средней и максимальной загрузке авиарейсов
     /// из заданного пункта отправления.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Список значений double</returns>
     public List<double> GetFlyightMaxAvrWeight()
     {
         var departure = "Rome";

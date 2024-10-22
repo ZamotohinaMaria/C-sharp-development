@@ -20,8 +20,17 @@ builder.Services.AddSingleton<IRepository<AirFlight, int>, AirFlightRepositoryLi
 builder.Services.AddSingleton<IRepository<Passeneger, int>, PassengerRepositoryList>();
 builder.Services.AddTransient<RequestRepository>();
 
-builder.Services.AddAutoMapper(typeof(Mapper));
+builder.Services.AddAutoMapper(typeof(AirlineCompaneMapper));
 
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Airline Company API", Version = "v1" });
+
+    // ¬ключаем XML комментарии (если используютс€)
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
 var app = builder.Build();
 

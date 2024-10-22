@@ -23,14 +23,7 @@ public class FlightServer(AirFlightDto item, IMapper mapper)
         var flight = mapper.Map<AirFlight>(item);
 
         PlaneRepositoryList planeRepository = new();
-        var plane = planeRepository.GetById(item.PlaneId);
-        if (plane == null)
-            flight.PlaneType = null;
-        else
-        {
-            flight.PlaneType = plane.Model;
-            flight.FlyingTime = TimeOnly.FromTimeSpan(item.Arrive - item.Departure);
-        }
+        flight.FlyingTime = TimeOnly.FromTimeSpan(item.Arrive - item.Departure);
         return flight;
     }
 }

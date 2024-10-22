@@ -56,7 +56,7 @@ public class PlaneController(IRepository<Plane, int> repository, IMapper mapper)
     }
 
     /// <summary>
-    /// Удалить самолет по id
+    /// Изменить самолет по id
     /// </summary>
     /// <param name="id"></param>
     /// <param name="newItem"></param>
@@ -65,14 +65,14 @@ public class PlaneController(IRepository<Plane, int> repository, IMapper mapper)
     public IActionResult Put(int id, [FromBody] PlaneDto newItem)
     {
         var plane = mapper.Map<Plane>(newItem);
-        plane.IdPlane = id;
+
         if (!repository.Update(id, plane))
             return NotFound();
         return Ok();
     }
 
     /// <summary>
-    /// Изменить самолет по id
+    /// Удалить самолет по id
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

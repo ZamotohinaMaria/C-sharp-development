@@ -10,17 +10,15 @@ namespace AirlineCompany.Server.Controllers;
 [ApiController]
 public class RequestController(RequestRepository repository) : ControllerBase
 {
-    private readonly RequestRepository _repository;
-
     /// <summary>
     /// 1) Вывести сведения о всех авиарейсах, вылетевших из указанного пункта отправления
     ///  в указанный пункт прибытия.
     /// </summary>
     /// <returns></returns>
     [HttpGet("first")]
-    public ActionResult<IEnumerable<AirFlight>> GetFirst()
+    public ActionResult<IEnumerable<AirFlight>> GetFirst(string departure, string arrive)
     {
-        return Ok(repository.GetFlyightDepartureArrive());
+        return Ok(repository.GetFlyightDepartureArrive(departure, arrive));
     }
 
 
@@ -30,9 +28,9 @@ public class RequestController(RequestRepository repository) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("second")]
-    public ActionResult<IEnumerable<Passeneger>> GetSecond()
+    public ActionResult<IEnumerable<Passeneger>> GetSecond(int idFlight)
     {
-        return Ok(repository.GetPassenegersWeightFlight());
+        return Ok(repository.GetPassenegersWeightFlight(idFlight));
     }
 
     /// <summary>
@@ -41,9 +39,9 @@ public class RequestController(RequestRepository repository) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("third")]
-    public ActionResult<IEnumerable<AirFlight>> GetThird()
+    public ActionResult<IEnumerable<AirFlight>> GetThird(string planeModel, DateTime departure, DateTime arrive)
     {
-        return Ok(repository.GetFlyightPassengersDate());
+        return Ok(repository.GetFlyightPassengersDate(planeModel, departure, arrive ));
     }
 
     /// <summary>

@@ -1,6 +1,5 @@
 ﻿using AirlineCompany.Domain.Interfaces;
 using AirlineCompany.Domain.Models;
-using AirlineCompany.Tests;
 
 namespace AirlineCompany.Domain.Repositories.ByList;
 
@@ -14,7 +13,7 @@ public class AirFlightRepositoryList : IRepository<AirFlight, int>
     /// <summary>
     /// Вернуть все полеты
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Список элементов класса AirFlight</returns>
     public List<AirFlight> GetAll()
     {
         return _flights;
@@ -23,8 +22,8 @@ public class AirFlightRepositoryList : IRepository<AirFlight, int>
     /// <summary>
     /// Вернуть полет по id
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">айди полета</param>
+    /// <returns>Элемент класса AirFlight</returns>
     public AirFlight? GetById(int id)
     {
         return _flights.Find(f => f.Idflight == id);
@@ -43,17 +42,14 @@ public class AirFlightRepositoryList : IRepository<AirFlight, int>
     /// <summary>
     /// Удалить полет по id
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">айди полета</param>
+    /// <returns>true - удачное удаление, false - во время удаления произошла ошибка</returns>
     public bool Delete(int id)
     {
         var flight = GetById(id);
 
         if (flight == null)
             return false;
-
-        for (var i = id + 1; i < _flights.Count; i++)
-            _flights[i].Idflight = i - 1;
 
         _flights.Remove(flight);
         return true;
@@ -62,22 +58,21 @@ public class AirFlightRepositoryList : IRepository<AirFlight, int>
     /// <summary>
     /// Изменить полет по id
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="newValue"></param>
-    /// <returns></returns>
+    /// <param name="id">айди полета</param>
+    /// <param name="newValue">Новое значение</param>
+    /// <returns>true - удачное изменение, false - во время изменения произошла ошибка</returns>
     public bool Update(int id, AirFlight newValue)
     {
-        var item_id = _flights.FindIndex(p => p.Idflight == id);
-        if (item_id == -1)
+        var flight = GetById(id);
+        if (flight == null)
             return false;
-        _flights[item_id].Idflight = newValue.Idflight;
-        _flights[item_id].CodeNumber = newValue.CodeNumber;
-        _flights[item_id].DeparturePoint = newValue.DeparturePoint;
-        _flights[item_id].ArrivalPoint = newValue.ArrivalPoint;
-        _flights[item_id].Departure = newValue.Departure;
-        _flights[item_id].Arrive = newValue.Arrive;
-        _flights[item_id].FlyingTime = newValue.FlyingTime;
-        _flights[item_id].PlaneType = newValue.PlaneType;
+        flight.CodeNumber = newValue.CodeNumber;
+        flight.DeparturePoint = newValue.DeparturePoint;
+        flight.ArrivalPoint = newValue.ArrivalPoint;
+        flight.Departure = newValue.Departure;
+        flight.Arrive = newValue.Arrive;
+        flight.FlyingTime = newValue.FlyingTime;
+        flight.PlaneType = newValue.PlaneType;
         return true;
     }
 }

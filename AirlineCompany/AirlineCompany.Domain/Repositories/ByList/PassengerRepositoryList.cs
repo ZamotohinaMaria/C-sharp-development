@@ -1,6 +1,5 @@
 ﻿using AirlineCompany.Domain.Interfaces;
 using AirlineCompany.Domain.Models;
-using AirlineCompany.Tests;
 
 namespace AirlineCompany.Domain.Repositories.ByList;
 
@@ -14,7 +13,7 @@ public class PassengerRepositoryList : IRepository<Passeneger, int>
     /// <summary>
     /// Вернуть всех пассажиров
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Список элементов класса Passeneger</returns>
     public List<Passeneger> GetAll()
     {
         return _passengres;
@@ -23,8 +22,8 @@ public class PassengerRepositoryList : IRepository<Passeneger, int>
     /// <summary>
     /// Вернуть пассажира по id
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">Айди пассажира</param>
+    /// <returns>Элемент класса Passeneger</returns>
     public Passeneger? GetById(int id)
     {
         return _passengres.Find(p => p.IdPassenger == id);
@@ -43,17 +42,14 @@ public class PassengerRepositoryList : IRepository<Passeneger, int>
     /// <summary>
     /// Удалить пассажира по id
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name="id">Айди пассажира</param>
+    /// <returns>true - удачное удаление, false - во время удаления произошла ошибка</returns>
     public bool Delete(int id)
     {
         var passenger = GetById(id);
         
         if (passenger == null) 
             return false;
-
-        for (var i = id + 1; i < _passengres.Count; i++)
-            _passengres[i].IdPassenger = i - 1;
 
         _passengres.Remove(passenger);
         return true;
@@ -62,21 +58,20 @@ public class PassengerRepositoryList : IRepository<Passeneger, int>
     /// <summary>
     /// Изменить пассажира по id
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="newValue"></param>
-    /// <returns></returns>
+    /// <param name="id">Айди пассажира</param>
+    /// <param name="newValue">Новое значение</param>
+    /// <returns>true - удачное изменение, false - во время изменения произошла ошибка</returns>
     public bool Update(int id, Passeneger newValue)
     {
-        var item_id = _passengres.FindIndex(p => p.IdPassenger == id);
-        if (item_id == -1)
+        var pssenger = GetById(id);
+        if (pssenger == null)
             return false;
-        _passengres[item_id].IdFlight = newValue.IdFlight;
-        _passengres[item_id].FullName = newValue.FullName;
-        _passengres[item_id].Passport = newValue.Passport;
-        _passengres[item_id].Registration = newValue.Registration;
-        _passengres[item_id].SeatNumber = newValue.SeatNumber;
-        _passengres[item_id].BaggageWeight = newValue.BaggageWeight;
-        _passengres[item_id].IdFlight = newValue.IdFlight;
+       pssenger.FullName = newValue.FullName;
+       pssenger.Passport = newValue.Passport;
+       pssenger.Registration = newValue.Registration;
+       pssenger.SeatNumber = newValue.SeatNumber;
+       pssenger.BaggageWeight = newValue.BaggageWeight;
+       pssenger.IdFlight = newValue.IdFlight;
         return true;
     }
 }
