@@ -1,16 +1,18 @@
-﻿using AirlineCompany.Domain.Interfaces;
+﻿using AirlineCompany.ApplicationServices.DTO;
+using AirlineCompany.Domain;
+using AirlineCompany.Domain.Interfaces;
 using AirlineCompany.Domain.Models;
 
-namespace AirlineCompany.Domain.Repositories.ByList;
+namespace AirlineCompany.Server.Services;
 
 /// <summary>
 /// Класс предоставляет методы, которые реализуют основыне запросы по заданию
 /// </summary>
-public class RequestRepository
+public class RequestService
 {
-    private static readonly List<AirFlight> _flights = FileRreader.ReadAirFlights("Data/airflyights.csv");
-    private static readonly List<Passeneger> _passengers = FileRreader.ReadPassengers("Data/passengers.csv");
-    private static readonly List<Plane> _planes = FileRreader.ReadPlanes("Data/planes.csv");
+    private readonly List<AirFlight> _flights = FileRreader.ReadAirFlights("Data/airflyights.csv");
+    private readonly List<Passeneger> _passengers = FileRreader.ReadPassengers("Data/passengers.csv");
+    private readonly List<Plane> _planes = FileRreader.ReadPlanes("Data/planes.csv");
 
     /// <summary>
     /// 1) Вывести сведения о всех авиарейсах, вылетевших из указанного пункта отправления
@@ -34,11 +36,11 @@ public class RequestRepository
     /// <returns>Список элементов класса Passeneger</returns>
     public List<Passeneger> GetPassenegersWeightFlight(int idFlight)
     {
-         var passenegersWeightFlight =
-            (from pass in _passengers
-             orderby pass.FullName descending
-             where pass.IdFlight == idFlight && pass.BaggageWeight == 0
-             select pass).ToList();
+        var passenegersWeightFlight =
+           (from pass in _passengers
+            orderby pass.FullName descending
+            where pass.IdFlight == idFlight && pass.BaggageWeight == 0
+            select pass).ToList();
 
         return passenegersWeightFlight;
     }
@@ -53,7 +55,7 @@ public class RequestRepository
     {
         var flyightPassengersDate =
             (from fly in _flights
-             where fly.PlaneType.Model == planeModel &&
+             where fly.Plane.Model == planeModel &&
              fly.Departure >= departure &&
              fly.Departure <= arrive
              select fly).ToList();
@@ -84,9 +86,9 @@ public class RequestRepository
         {
             result.Add(new AirFlightNumberPassangers
             {
-                    Fly = item.Fly,
-                    NumberPassengers = item.Count
-                }
+                Fly = item.Fly,
+                NumberPassengers = item.Count
+            }
             );
         }
         return result;
@@ -128,7 +130,7 @@ public class RequestRepository
                 Bag = pass.BaggageWeight,
             };
 
-        List<double> result = [flightWeight.Max(f => f.Bag), 
+        List<double> result = [flightWeight.Max(f => f.Bag),
                                flightWeight.Average(f => f.Bag)];
 
         return result;

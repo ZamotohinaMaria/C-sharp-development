@@ -53,8 +53,7 @@ public class AirFlightController(IRepository<AirFlight, int> repository, IMapper
     [HttpPost]
     public IActionResult Post([FromBody] AirFlightDto item)
     {
-        AirlineCompaneMapper service = new();
-        var flight = service.GetAirFlight(item, mapper);
+        var flight = mapper.Map<AirFlight>(item);
         repository.Add(flight);
         return Ok();
     }
@@ -68,9 +67,7 @@ public class AirFlightController(IRepository<AirFlight, int> repository, IMapper
     [HttpPut("{id}")]
     public IActionResult Put(int id, [FromBody] AirFlightDto newItem)
     {
-        AirlineCompaneMapper service = new();
-
-        var flight = service.GetAirFlight(newItem, mapper);
+        var flight = mapper.Map<AirFlight>(newItem);
 
         if (!repository.Update(id, flight))
             return NotFound();

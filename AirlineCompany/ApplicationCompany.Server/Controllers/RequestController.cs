@@ -1,6 +1,8 @@
 ﻿using AirlineCompany.Domain.Models;
-using AirlineCompany.Domain.Repositories.ByList;
 using Microsoft.AspNetCore.Mvc;
+using AirlineCompany.Server.Services;
+using AirlineCompany.Domain.Repositories;
+using AirlineCompany.ApplicationServices.DTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,7 +10,7 @@ namespace AirlineCompany.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class RequestController(RequestRepository repository) : ControllerBase
+public class RequestController(RequestService repository) : ControllerBase
 {
     /// <summary>
     /// 1) Вывести сведения о всех авиарейсах, вылетевших из указанного пункта отправления

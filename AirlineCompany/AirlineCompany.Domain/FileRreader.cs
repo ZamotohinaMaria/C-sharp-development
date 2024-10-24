@@ -14,15 +14,15 @@ public static class FileRreader
     /// </summary>
     /// <param name="filename"></param>
     /// <returns></returns>
-    
-    private static List<Plane> _planes = FileRreader.ReadPlanes("Data/planes.csv");
+
+    private static List<Plane> _planes = ReadPlanes("Data/planes.csv");
     public static List<AirFlight> ReadAirFlights(string filename)
     {
         using var reader = new StreamReader(filename);
         var airFlights = new List<AirFlight>();
         var flyId = 0;
 
-        while(!reader.EndOfStream)
+        while (!reader.EndOfStream)
         {
             var airLine = reader.ReadLine();
             if (airLine == null || !airLine.Contains('"')) continue;
@@ -40,7 +40,7 @@ public static class FileRreader
                 Departure = DateTime.ParseExact(tokens[3], "yyyy-MM-dd HH:m:s", CultureInfo.InvariantCulture),
                 Arrive = DateTime.Parse(tokens[4]),
                 FlyingTime = TimeOnly.Parse(tokens[5]),
-                PlaneType = plane ?? new Plane { IdPlane = _planes.Count, Efficiency = 0, LoadCapacity = 0, Model = "none", PassengerMax = 0 }
+                Plane = plane ?? new Plane { IdPlane = _planes.Count, Efficiency = 0, LoadCapacity = 0, Model = "none", PassengerMax = 0 }
             };
 
             airFlights.Add(flight);

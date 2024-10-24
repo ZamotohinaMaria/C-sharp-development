@@ -8,7 +8,8 @@ namespace AirlineCompany.Domain.Repositories.ByList;
 /// </summary>
 public class AirFlightRepositoryList : IRepository<AirFlight, int>
 {
-    private static readonly List<AirFlight> _flights = FileRreader.ReadAirFlights("Data/airflyights.csv");
+    private static List<AirFlight> _flights = FileRreader.ReadAirFlights("Data/airflyights.csv");
+    private static int _countFlights = _flights.Count;
 
     /// <summary>
     /// Вернуть все полеты
@@ -35,7 +36,7 @@ public class AirFlightRepositoryList : IRepository<AirFlight, int>
     /// <param name="newItem"></param>
     public void Add(AirFlight newItem)
     {
-        newItem.Idflight = _flights.Count;
+        newItem.Idflight = _countFlights++;
         _flights.Add(newItem);
     }
 
@@ -72,7 +73,7 @@ public class AirFlightRepositoryList : IRepository<AirFlight, int>
         flight.Departure = newValue.Departure;
         flight.Arrive = newValue.Arrive;
         flight.FlyingTime = newValue.FlyingTime;
-        flight.PlaneType = newValue.PlaneType;
+        flight.Plane = newValue.Plane;
         return true;
     }
 }

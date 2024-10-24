@@ -42,6 +42,6 @@ public class AirFlight
     /// <summary>
     /// Тип самолета
     /// </summary>
-    public required Plane PlaneType { get; set; }
+    public required Plane Plane { get; set; }
 }
 

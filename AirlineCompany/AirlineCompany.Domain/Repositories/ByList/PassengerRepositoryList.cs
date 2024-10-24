@@ -8,7 +8,8 @@ namespace AirlineCompany.Domain.Repositories.ByList;
 /// </summary>
 public class PassengerRepositoryList : IRepository<Passeneger, int>
 {
-    private static readonly List<Passeneger> _passengres = FileRreader.ReadPassengers("Data/passengers.csv");
+    private static List<Passeneger> _passengres = FileRreader.ReadPassengers("Data/passengers.csv");
+    private static int _countPassengers = _passengres.Count;
 
     /// <summary>
     /// Вернуть всех пассажиров
@@ -35,7 +36,7 @@ public class PassengerRepositoryList : IRepository<Passeneger, int>
     /// <param name="newItem"></param>
     public void Add(Passeneger newItem)
     {
-        newItem.IdPassenger = _passengres.Count;
+        newItem.IdPassenger = _countPassengers++;
         _passengres.Add(newItem);
     }
 

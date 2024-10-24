@@ -1,4 +1,6 @@
-﻿namespace AirlineCompany.Domain.Models;
+﻿using AirlineCompany.Domain.Models;
+
+namespace AirlineCompany.ApplicationServices.DTO;
 
 /// <summary>
 /// Класс пар (полет - значение)

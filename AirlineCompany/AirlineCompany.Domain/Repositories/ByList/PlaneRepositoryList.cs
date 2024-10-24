@@ -8,7 +8,8 @@ namespace AirlineCompany.Domain.Repositories.ByList;
 /// </summary>
 public class PlaneRepositoryList: IRepository<Plane, int>
 {
-    private static readonly List<Plane> _planes = FileRreader.ReadPlanes("Data/planes.csv");
+    private static List<Plane> _planes = FileRreader.ReadPlanes("Data/planes.csv");
+    private static int _countPlanes = _planes.Count;
 
     /// <summary>
     /// Вернуть все самолеты
@@ -36,7 +37,7 @@ public class PlaneRepositoryList: IRepository<Plane, int>
     /// <param name="newItem"></param>
     public void Add(Plane newItem)
     {
-        newItem.IdPlane = _planes.Count;
+        newItem.IdPlane = _countPlanes++;
         _planes.Add(newItem);
     }
 
