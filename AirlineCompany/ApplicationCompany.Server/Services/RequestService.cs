@@ -2,18 +2,15 @@
 using AirlineCompany.Domain;
 using AirlineCompany.Domain.Interfaces;
 using AirlineCompany.Domain.Models;
+using AutoMapper;
 
 namespace AirlineCompany.Server.Services;
 
 /// <summary>
 /// Класс предоставляет методы, которые реализуют основыне запросы по заданию
 /// </summary>
-public class RequestService
+public class RequestService(IRepository<AirFlight, int> airFlightRepository, IRepository<Passeneger, int> passengerRepository)
 {
-    private readonly List<AirFlight> _flights = FileRreader.ReadAirFlights("Data/airflyights.csv");
-    private readonly List<Passeneger> _passengers = FileRreader.ReadPassengers("Data/passengers.csv");
-    private readonly List<Plane> _planes = FileRreader.ReadPlanes("Data/planes.csv");
-
     /// <summary>
     /// 1) Вывести сведения о всех авиарейсах, вылетевших из указанного пункта отправления
     ///  в указанный пункт прибытия.
@@ -22,7 +19,7 @@ public class RequestService
     public List<AirFlight> GetFlyightDepartureArrive(string departure, string arrive)
     {
         var flyightDepartureArrive =
-            (from fly in _flights
+            (from fly in airFlightRepository.GetAll()
              where fly.DeparturePoint == departure && fly.ArrivalPoint == arrive
              select fly).ToList();
         return flyightDepartureArrive;
@@ -37,7 +34,7 @@ public class RequestService
     public List<Passeneger> GetPassenegersWeightFlight(int idFlight)
     {
         var passenegersWeightFlight =
-           (from pass in _passengers
+           (from pass in passengerRepository.GetAll()
             orderby pass.FullName descending
             where pass.IdFlight == idFlight && pass.BaggageWeight == 0
             select pass).ToList();
@@ -54,7 +51,7 @@ public class RequestService
     public List<AirFlight> GetFlyightPassengersDate(string planeModel, DateTime departure, DateTime arrive)
     {
         var flyightPassengersDate =
-            (from fly in _flights
+            (from fly in airFlightRepository.GetAll()
              where fly.Plane.Model == planeModel &&
              fly.Departure >= departure &&
              fly.Departure <= arrive
@@ -71,27 +68,27 @@ public class RequestService
     public List<AirFlightNumberPassangers> GetFlyightTopPassengers()
     {
         var flyightTopPassengers =
-            (from fly in _flights
-             let c = _passengers.Count(pass => pass.IdFlight == fly.Idflight)
+            (from fly in airFlightRepository.GetAll()
+             let c = passengerRepository.GetAll().Count(pass => pass.IdFlight == fly.Idflight)
              orderby c descending
              select new
              {
                  Fly = fly,
                  Count = c
-             }).Take(5).ToList();
+             }).Take(5).Select(o => new AirFlightNumberPassangers { Fly = o.Fly, NumberPassengers = o.Count}).ToList();
 
-        List<AirFlightNumberPassangers> result = new();
+        //List<AirFlightNumberPassangers> result = new();
 
-        foreach (var item in flyightTopPassengers)
-        {
-            result.Add(new AirFlightNumberPassangers
-            {
-                Fly = item.Fly,
-                NumberPassengers = item.Count
-            }
-            );
-        }
-        return result;
+        //foreach (var item in flyightTopPassengers)
+        //{
+        //    result.Add(new AirFlightNumberPassangers
+        //    {
+        //        Fly = item.Fly,
+        //        NumberPassengers = item.Count
+        //    }
+        //    );
+        //}
+        return flyightTopPassengers;
     }
 
 
@@ -102,8 +99,8 @@ public class RequestService
     public List<AirFlight> GetFlyightMinTime()
     {
         var flyightMinTime =
-            (from fly in _flights
-             let minTime = _flights.Min(pass => pass.FlyingTime)
+            (from fly in airFlightRepository.GetAll()
+             let minTime = airFlightRepository.GetAll().Min(pass => pass.FlyingTime)
              where fly.FlyingTime == minTime
              select fly).ToList();
 
@@ -121,8 +118,8 @@ public class RequestService
         var departure = "Rome";
 
         var flightWeight =
-            from fly in _flights
-            join pass in _passengers on fly.Idflight equals pass.IdFlight
+            from fly in airFlightRepository.GetAll()
+            join pass in passengerRepository.GetAll() on fly.Idflight equals pass.IdFlight
             where fly.DeparturePoint == departure
             select new
             {

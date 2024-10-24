@@ -1,14 +1,15 @@
 ﻿using AirlineCompany.Domain.Interfaces;
 using AirlineCompany.Domain.Models;
+using System.Collections.Generic;
 
 namespace AirlineCompany.Domain.Repositories.ByList;
 
 /// <summary>
 /// Репозиторий Самолетов
 /// </summary>
-public class PlaneRepositoryList: IRepository<Plane, int>
+public class PlaneRepositoryList(): IRepository<Plane, int>
 {
-    private static List<Plane> _planes = FileRreader.ReadPlanes("Data/planes.csv");
+    private static readonly List<Plane> _planes = FileRreader.ReadPlanes("Data/planes.csv");
     private static int _countPlanes = _planes.Count;
 
     /// <summary>

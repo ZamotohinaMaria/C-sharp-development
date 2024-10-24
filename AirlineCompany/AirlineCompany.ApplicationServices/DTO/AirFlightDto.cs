@@ -33,5 +33,5 @@ public class AirFlightDto
     /// <summary>
     /// Тип самолета
     /// </summary>
-    public required int IdPlaneType { get; set; }
+    public required int IdPlane { get; set; }
 }

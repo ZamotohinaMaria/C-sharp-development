@@ -5,7 +5,7 @@
 /// </summary>
 /// <typeparam name="TEntity"></typeparam>
 /// <typeparam name="Tkey"></typeparam>
-public interface IRepository<TEntity, in Tkey>
+public interface IRepository<TEntity, Tkey>
 {
     /// <summary>
     /// Вернуть все элементы коллекции

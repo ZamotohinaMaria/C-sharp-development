@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IRepository<Plane, int>, PlaneRepositoryList>();
 builder.Services.AddSingleton<IRepository<AirFlight, int>, AirFlightRepositoryList>();
 builder.Services.AddSingleton<IRepository<Passeneger, int>, PassengerRepositoryList>();
-builder.Services.AddTransient<RequestService>();
+builder.Services.AddSingleton<RequestService>();
 
 builder.Services.AddSingleton(provider => new MapperConfiguration(config =>
 {

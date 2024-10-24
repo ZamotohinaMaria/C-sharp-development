@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using AirlineCompany.Server.Services;
 using AirlineCompany.Domain.Repositories;
 using AirlineCompany.ApplicationServices.DTO;
+using AirlineCompany.Domain.Repositories.ByList;
+using AirlineCompany.Domain.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,17 +12,17 @@ namespace AirlineCompany.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class RequestController(RequestService repository) : ControllerBase
+public class RequestController(RequestService service) : ControllerBase
 {
     /// <summary>
     /// 1) Вывести сведения о всех авиарейсах, вылетевших из указанного пункта отправления
     ///  в указанный пункт прибытия.
     /// </summary>
     /// <returns></returns>
-    [HttpGet("first")]
-    public ActionResult<IEnumerable<AirFlight>> GetFirst(string departure, string arrive)
+    [HttpGet("FirstTask")]
+    public ActionResult<IEnumerable<AirFlight>> GetFlyightDepartureArrive(string departure, string arrive)
     {
-        return Ok(repository.GetFlyightDepartureArrive(departure, arrive));
+        return Ok(service.GetFlyightDepartureArrive(departure, arrive));
     }
 
 
@@ -29,10 +31,10 @@ public class RequestController(RequestService repository) : ControllerBase
     /// вес багажа которых равен нулю, упорядочить по ФИО.
     /// </summary>
     /// <returns></returns>
-    [HttpGet("second")]
-    public ActionResult<IEnumerable<Passeneger>> GetSecond(int idFlight)
+    [HttpGet("SecondTask")]
+    public ActionResult<IEnumerable<Passeneger>> GetPassenegersWeightFlight(int idFlight)
     {
-        return Ok(repository.GetPassenegersWeightFlight(idFlight));
+        return Ok(service.GetPassenegersWeightFlight(idFlight));
     }
 
     /// <summary>
@@ -40,20 +42,20 @@ public class RequestController(RequestService repository) : ControllerBase
     /// в указанный период времени.
     /// </summary>
     /// <returns></returns>
-    [HttpGet("third")]
-    public ActionResult<IEnumerable<AirFlight>> GetThird(string planeModel, DateTime departure, DateTime arrive)
+    [HttpGet("ThirdTask")]
+    public ActionResult<IEnumerable<AirFlight>> GetFlyightPassengersDate(string planeModel, DateTime departure, DateTime arrive)
     {
-        return Ok(repository.GetFlyightPassengersDate(planeModel, departure, arrive ));
+        return Ok(service.GetFlyightPassengersDate(planeModel, departure, arrive ));
     }
 
     /// <summary>
     /// 4) Вывести топ 5 авиарейсов по количеству перевезённых пассажиров.
     /// </summary>
     /// <returns></returns>
-    [HttpGet("fourth")]
-    public ActionResult<IEnumerable<AirFlightNumberPassangers>> GetFourth()
+    [HttpGet("FourthTask")]
+    public ActionResult<IEnumerable<AirFlightNumberPassangers>> GetFlyightTopPassengers()
     {
-        return Ok(repository.GetFlyightTopPassengers());
+        return Ok(service.GetFlyightTopPassengers());
     }
 
 
@@ -61,10 +63,10 @@ public class RequestController(RequestService repository) : ControllerBase
     /// 5) Вывести список рейсов с минимальным временем в пути.
     /// </summary>
     /// <returns></returns>
-    [HttpGet("fifth")]
-    public ActionResult<IEnumerable<AirFlight>> GetFifth()
+    [HttpGet("FifthTask")]
+    public ActionResult<IEnumerable<AirFlight>> GetFlyightMinTime()
     {
-        return Ok(repository.GetFlyightMinTime());
+        return Ok(service.GetFlyightMinTime());
     }
 
 
@@ -73,9 +75,9 @@ public class RequestController(RequestService repository) : ControllerBase
     /// из заданного пункта отправления.
     /// </summary>
     /// <returns></returns>
-    [HttpGet("sixth")]
-    public ActionResult<IEnumerable<double>> GetSixth()
+    [HttpGet("SixthTask")]
+    public ActionResult<IEnumerable<double>> GetFlyightMaxAvrWeight()
     {
-        return Ok(repository.GetFlyightMaxAvrWeight());
+        return Ok(service.GetFlyightMaxAvrWeight());
     }
 }
