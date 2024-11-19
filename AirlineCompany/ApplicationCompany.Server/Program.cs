@@ -1,13 +1,13 @@
 using AirlineCompany.Domain.Models;
 using AirlineCompany.Domain.Repositories.ByList;
 using AirlineCompany.Domain.Interfaces;
+using AirlineCompany.ApplicationServices;
+using AirlineCompany.Server.Services;
 
 using AutoMapper.Configuration;
-using AirlineCompany.ApplicationServices;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using AutoMapper;
-using AirlineCompany.Server.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);

@@ -77,17 +77,6 @@ public class RequestService(IRepository<AirFlight, int> airFlightRepository, IRe
                  Count = c
              }).Take(5).Select(o => new AirFlightNumberPassangers { Fly = o.Fly, NumberPassengers = o.Count}).ToList();
 
-        //List<AirFlightNumberPassangers> result = new();
-
-        //foreach (var item in flyightTopPassengers)
-        //{
-        //    result.Add(new AirFlightNumberPassangers
-        //    {
-        //        Fly = item.Fly,
-        //        NumberPassengers = item.Count
-        //    }
-        //    );
-        //}
         return flyightTopPassengers;
     }
 

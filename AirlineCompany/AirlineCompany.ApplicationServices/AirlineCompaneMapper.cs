@@ -1,10 +1,10 @@
 ﻿using AirlineCompany.Domain.Models;
-using AirlineCompany.ApplicationServices.DTO;
-using AutoMapper;
-using System.Runtime.CompilerServices;
 using AirlineCompany.Domain.Repositories.ByList;
-using System.Net.Http.Headers;
 using AirlineCompany.Domain.Interfaces;
+using AirlineCompany.ApplicationServices.DTO;
+using System.Runtime.CompilerServices;
+using AutoMapper;
+using System.Net.Http.Headers;
 
 namespace AirlineCompany.ApplicationServices;
 
