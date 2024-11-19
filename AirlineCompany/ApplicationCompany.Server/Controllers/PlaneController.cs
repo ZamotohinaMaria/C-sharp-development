@@ -14,16 +14,19 @@ namespace AirlineCompany.Server.Controllers;
 /// <param name="mapper"></param>
 [Route("api/[controller]")]
 [ApiController]
-public class PlaneController(IRepository<Plane, int> repository, IMapper mapper) : ControllerBase
+public class PlaneController(IDbRepository<Plane, int> repository, IMapper mapper) : ControllerBase
 {
     /// <summary>
     /// Вернуть все самолеты
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Plane>> Get()
+    public async Task<ActionResult<IEnumerable<Plane>>> Get()
     {
-        return Ok(repository.GetAll());
+        var planes = await repository.GetAll();
+
+        if (planes == null) return NotFound();
+        return Ok();
     }
 
     /// <summary>
@@ -32,9 +35,9 @@ public class PlaneController(IRepository<Plane, int> repository, IMapper mapper)
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public ActionResult<Plane> Get(int id)
+    public async Task<ActionResult<Plane>> Get(int id)
     {
-        var plane = repository.GetById(id);
+        var plane = await repository.GetById(id);
 
         if (plane == null)
             return NotFound();
@@ -48,10 +51,10 @@ public class PlaneController(IRepository<Plane, int> repository, IMapper mapper)
     /// <param name="item"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult Post([FromBody] PlaneDto item)
+    public async Task<IActionResult> Post([FromBody] PlaneDto item)
     {
         var plane = mapper.Map<Plane>(item);
-        repository.Add(plane);
+        await repository.Add(plane);
         return Ok();
     }
 
@@ -62,11 +65,12 @@ public class PlaneController(IRepository<Plane, int> repository, IMapper mapper)
     /// <param name="newItem"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] PlaneDto newItem)
+    public async Task<IActionResult> Put(int id, [FromBody] PlaneDto newItem)
     {
         var plane = mapper.Map<Plane>(newItem);
+        var checkUpdate = await repository.Update(id, plane);
 
-        if (!repository.Update(id, plane))
+        if (!checkUpdate)
             return NotFound();
         return Ok();
     }
@@ -77,9 +81,11 @@ public class PlaneController(IRepository<Plane, int> repository, IMapper mapper)
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        if (!repository.Delete(id))
+        var checkDelete = await repository.Delete(id);
+
+        if (!checkDelete)
             return NotFound();
         return Ok();
     }

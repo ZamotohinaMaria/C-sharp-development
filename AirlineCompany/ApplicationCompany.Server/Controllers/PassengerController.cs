@@ -15,16 +15,19 @@ namespace AirlineCompany.Server.Controllers;
 /// <param name="mapper"></param>
 [Route("api/[controller]")]
 [ApiController]
-public class PassengerController(IRepository<Passeneger, int> repository, IMapper mapper) : ControllerBase
+public class PassengerController(IDbRepository<Passeneger, int> repository, IMapper mapper) : ControllerBase
 {
     /// <summary>
     /// Вернуть всех пассажиров
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public ActionResult<IEnumerable<Passeneger>> Get()
+    public async Task<ActionResult<IEnumerable<Passeneger>>> Get()
     {
-        return Ok(repository.GetAll());
+        var passengers =await repository.GetAll();
+
+        if (passengers == null) return NotFound();
+        return Ok();
     }
 
     /// <summary>
@@ -33,9 +36,9 @@ public class PassengerController(IRepository<Passeneger, int> repository, IMappe
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public ActionResult<Passeneger> Get(int id)
+    public async Task<ActionResult<Passeneger>> Get(int id)
     {
-        var passenger = repository.GetById(id);
+        var passenger = await repository.GetById(id);
 
         if (passenger == null)
             return NotFound();
@@ -49,10 +52,10 @@ public class PassengerController(IRepository<Passeneger, int> repository, IMappe
     /// <param name="item"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult Post([FromBody] PassengerDto item)
+    public async Task<IActionResult> Post([FromBody] PassengerDto item)
     {
         var passenger = mapper.Map<Passeneger>(item);
-        repository.Add(passenger);
+        await repository.Add(passenger);
         return Ok();
     }
 
@@ -63,11 +66,12 @@ public class PassengerController(IRepository<Passeneger, int> repository, IMappe
     /// <param name="newItem"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] PassengerDto newItem)
+    public async Task<IActionResult> Put(int id, [FromBody] PassengerDto newItem)
     {
         var passenger = mapper.Map<Passeneger>(newItem);
+        var checkUpdate = await repository.Update(id, passenger);
 
-        if (!repository.Update(id, passenger))
+        if (!checkUpdate)
             return NotFound();
         return Ok();
     }
@@ -78,9 +82,11 @@ public class PassengerController(IRepository<Passeneger, int> repository, IMappe
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        if (!repository.Delete(id))
+        var checkDelete = await repository.Delete(id);
+
+        if (!checkDelete)
             return NotFound();
         return Ok();
     }

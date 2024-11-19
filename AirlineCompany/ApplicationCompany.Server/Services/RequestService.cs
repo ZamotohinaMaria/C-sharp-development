@@ -9,17 +9,18 @@ namespace AirlineCompany.Server.Services;
 /// <summary>
 /// Класс предоставляет методы, которые реализуют основыне запросы по заданию
 /// </summary>
-public class RequestService(IRepository<AirFlight, int> airFlightRepository, IRepository<Passeneger, int> passengerRepository)
+public class RequestService(IDbRepository<AirFlight, int> airFlightRepository, IDbRepository<Passeneger, int> passengerRepository)
 {
     /// <summary>
     /// 1) Вывести сведения о всех авиарейсах, вылетевших из указанного пункта отправления
     ///  в указанный пункт прибытия.
     /// </summary>
     /// <returns>Список элементов класса AirFlight</returns>
-    public List<AirFlight> GetFlyightDepartureArrive(string departure, string arrive)
+    public async Task<List<AirFlight>> GetFlyightDepartureArrive(string departure, string arrive)
     {
+        var airFlights = await airFlightRepository.GetAll();
         var flyightDepartureArrive =
-            (from fly in airFlightRepository.GetAll()
+            (from fly in airFlights
              where fly.DeparturePoint == departure && fly.ArrivalPoint == arrive
              select fly).ToList();
         return flyightDepartureArrive;
@@ -31,10 +32,11 @@ public class RequestService(IRepository<AirFlight, int> airFlightRepository, IRe
     /// вес багажа которых равен нулю, упорядочить по ФИО.
     /// </summary>
     /// <returns>Список элементов класса Passeneger</returns>
-    public List<Passeneger> GetPassenegersWeightFlight(int idFlight)
+    public async Task<List<Passeneger>> GetPassenegersWeightFlight(int idFlight)
     {
+        var passengers = await passengerRepository.GetAll();
         var passenegersWeightFlight =
-           (from pass in passengerRepository.GetAll()
+           (from pass in passengers
             orderby pass.FullName descending
             where pass.IdFlight == idFlight && pass.BaggageWeight == 0
             select pass).ToList();
@@ -48,10 +50,12 @@ public class RequestService(IRepository<AirFlight, int> airFlightRepository, IRe
     /// в указанный период времени.
     /// </summary>
     /// <returns>Список элементов класса AirFlight</returns>
-    public List<AirFlight> GetFlyightPassengersDate(string planeModel, DateTime departure, DateTime arrive)
+    public async Task<List<AirFlight>> GetFlyightPassengersDate(string planeModel, DateTime departure, DateTime arrive)
     {
+        var airFlights = await airFlightRepository.GetAll();
+
         var flyightPassengersDate =
-            (from fly in airFlightRepository.GetAll()
+            (from fly in airFlights
              where fly.Plane.Model == planeModel &&
              fly.Departure >= departure &&
              fly.Departure <= arrive
@@ -65,11 +69,14 @@ public class RequestService(IRepository<AirFlight, int> airFlightRepository, IRe
     /// 4) Вывести топ 5 авиарейсов по количеству перевезённых пассажиров.
     /// </summary>
     /// <returns>Список элементов класса AirFlightNumberPassangers</returns>
-    public List<AirFlightNumberPassangers> GetFlyightTopPassengers()
+    public async Task<List<AirFlightNumberPassangers>> GetFlyightTopPassengers()
     {
+        var passengers = await passengerRepository.GetAll();
+        var airFlights = await airFlightRepository.GetAll();
+
         var flyightTopPassengers =
-            (from fly in airFlightRepository.GetAll()
-             let c = passengerRepository.GetAll().Count(pass => pass.IdFlight == fly.Idflight)
+            (from fly in airFlights
+             let c = passengers.Count(pass => pass.IdFlight == fly.Idflight)
              orderby c descending
              select new
              {
@@ -77,17 +84,6 @@ public class RequestService(IRepository<AirFlight, int> airFlightRepository, IRe
                  Count = c
              }).Take(5).Select(o => new AirFlightNumberPassangers { Fly = o.Fly, NumberPassengers = o.Count}).ToList();
 
-        //List<AirFlightNumberPassangers> result = new();
-
-        //foreach (var item in flyightTopPassengers)
-        //{
-        //    result.Add(new AirFlightNumberPassangers
-        //    {
-        //        Fly = item.Fly,
-        //        NumberPassengers = item.Count
-        //    }
-        //    );
-        //}
         return flyightTopPassengers;
     }
 
@@ -96,11 +92,13 @@ public class RequestService(IRepository<AirFlight, int> airFlightRepository, IRe
     /// 5) Вывести список рейсов с минимальным временем в пути.
     /// </summary>
     /// <returns>Список элементов класса AirFlight</returns>
-    public List<AirFlight> GetFlyightMinTime()
+    public async Task<List<AirFlight>> GetFlyightMinTime()
     {
+        var airFlights = await airFlightRepository.GetAll();
+
         var flyightMinTime =
-            (from fly in airFlightRepository.GetAll()
-             let minTime = airFlightRepository.GetAll().Min(pass => pass.FlyingTime)
+            (from fly in airFlights
+             let minTime = airFlights.Min(pass => pass.FlyingTime)
              where fly.FlyingTime == minTime
              select fly).ToList();
 
@@ -113,13 +111,14 @@ public class RequestService(IRepository<AirFlight, int> airFlightRepository, IRe
     /// из заданного пункта отправления.
     /// </summary>
     /// <returns>Список значений double</returns>
-    public List<double> GetFlyightMaxAvrWeight()
+    public async Task<List<double>> GetFlyightMaxAvrWeight(string departure)
     {
-        var departure = "Rome";
+        var passengers = await passengerRepository.GetAll();
+        var airFlights = await airFlightRepository.GetAll();
 
         var flightWeight =
-            from fly in airFlightRepository.GetAll()
-            join pass in passengerRepository.GetAll() on fly.Idflight equals pass.IdFlight
+            from fly in airFlights
+            join pass in passengers on fly.Idflight equals pass.IdFlight
             where fly.DeparturePoint == departure
             select new
             {

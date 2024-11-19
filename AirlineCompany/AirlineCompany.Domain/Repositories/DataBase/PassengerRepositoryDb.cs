@@ -1,24 +1,22 @@
 ﻿using AirlineCompany.Domain.Interfaces;
 using AirlineCompany.Domain.Models;
-using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
-namespace AirlineCompany.Domain.Repositories.ByList;
+namespace AirlineCompany.Domain.Repositories.DataBase;
 
 /// <summary>
 /// Репозиторий Пассажиров
 /// </summary>
-public class PassengerRepositoryList : IRepository<Passeneger, int>
+public class PassengerRepositoryDb(AirlineCompanyDbContext context) : IDbRepository<Passeneger, int>
 {
-    private static readonly List<Passeneger> _passengres = FileRreader.ReadPassengers("Data/passengers.csv");
-    private static int _countPassengers = _passengres.Count;
-
     /// <summary>
     /// Вернуть всех пассажиров
     /// </summary>
     /// <returns>Список элементов класса Passeneger</returns>
-    public List<Passeneger> GetAll()
+    public async Task<List<Passeneger>> GetAll()
     {
-        return _passengres;
+        return await context.Passenegers.ToListAsync();
     }
 
     /// <summary>
@@ -26,19 +24,19 @@ public class PassengerRepositoryList : IRepository<Passeneger, int>
     /// </summary>
     /// <param name="id">Айди пассажира</param>
     /// <returns>Элемент класса Passeneger</returns>
-    public Passeneger? GetById(int id)
+    public async Task<Passeneger?> GetById(int id)
     {
-        return _passengres.Find(p => p.IdPassenger == id);
+        return await context.Passenegers.FindAsync(id);
     }
 
     /// <summary>
     /// Добавить пассажира
     /// </summary>
     /// <param name="newItem"></param>
-    public void Add(Passeneger newItem)
+    public async Task Add(Passeneger newItem)
     {
-        newItem.IdPassenger = _countPassengers++;
-        _passengres.Add(newItem);
+        await context.Passenegers.AddAsync(newItem);
+        await context.SaveChangesAsync();
     }
 
     /// <summary>
@@ -46,14 +44,15 @@ public class PassengerRepositoryList : IRepository<Passeneger, int>
     /// </summary>
     /// <param name="id">Айди пассажира</param>
     /// <returns>true - удачное удаление, false - во время удаления произошла ошибка</returns>
-    public bool Delete(int id)
+    public async Task<bool> Delete(int id)
     {
-        var passenger = GetById(id);
-        
-        if (passenger == null) 
+        var passenger = await GetById(id);
+
+        if (passenger == null)
             return false;
 
-        _passengres.Remove(passenger);
+        context.Passenegers.Remove(passenger);
+        await context.SaveChangesAsync();
         return true;
     }
 
@@ -63,17 +62,22 @@ public class PassengerRepositoryList : IRepository<Passeneger, int>
     /// <param name="id">Айди пассажира</param>
     /// <param name="newValue">Новое значение</param>
     /// <returns>true - удачное изменение, false - во время изменения произошла ошибка</returns>
-    public bool Update(int id, Passeneger newValue)
+    public async Task<bool> Update(int id, Passeneger newValue)
     {
-        var pssenger = GetById(id);
+        var pssenger = await GetById(id);
         if (pssenger == null)
             return false;
-       pssenger.FullName = newValue.FullName;
-       pssenger.Passport = newValue.Passport;
-       pssenger.Registration = newValue.Registration;
-       pssenger.SeatNumber = newValue.SeatNumber;
-       pssenger.BaggageWeight = newValue.BaggageWeight;
-       pssenger.IdFlight = newValue.IdFlight;
+
+        pssenger.FullName = newValue.FullName;
+        pssenger.Passport = newValue.Passport;
+        pssenger.Registration = newValue.Registration;
+        pssenger.SeatNumber = newValue.SeatNumber;
+        pssenger.BaggageWeight = newValue.BaggageWeight;
+        pssenger.IdFlight = newValue.IdFlight;
+
+        context.Passenegers.Update(pssenger);
+        await context.SaveChangesAsync();
+
         return true;
     }
 }

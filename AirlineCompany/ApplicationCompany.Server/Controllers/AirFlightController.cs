@@ -15,7 +15,7 @@ namespace AirlineCompany.Server.Controllers;
 /// <param name="mapper"></param>
 [Route("api/[controller]")]
 [ApiController]
-public class AirFlightController(IRepository<AirFlight, int> repository, IMapper mapper) : ControllerBase
+public class AirFlightController(IDbRepository<AirFlight, int> repository, IMapper mapper) : ControllerBase
 {
 
     /// <summary>
@@ -23,9 +23,12 @@ public class AirFlightController(IRepository<AirFlight, int> repository, IMapper
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public ActionResult<IEnumerable<AirFlight>> Get()
+    public async Task<ActionResult<IEnumerable<AirFlight>>> Get()
     {
-        return Ok(repository.GetAll());
+        var flights = await repository.GetAll();
+
+        if (flights == null) return NotFound();
+        return Ok();
     }
 
 
@@ -35,9 +38,9 @@ public class AirFlightController(IRepository<AirFlight, int> repository, IMapper
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id}")]
-    public ActionResult<AirFlight> Get(int id)
+    public async Task<ActionResult<AirFlight>> Get(int id)
     {
-        var flight = repository.GetById(id);
+        var flight = await repository.GetById(id);
 
         if (flight == null)
             return NotFound();
@@ -51,10 +54,10 @@ public class AirFlightController(IRepository<AirFlight, int> repository, IMapper
     /// <param name="item"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult Post([FromBody] AirFlightDto item)
+    public async Task<IActionResult> Post([FromBody] AirFlightDto item)
     {
         var flight = mapper.Map<AirFlight>(item);
-        repository.Add(flight);
+        await repository.Add(flight);
         return Ok();
     }
 
@@ -65,11 +68,12 @@ public class AirFlightController(IRepository<AirFlight, int> repository, IMapper
     /// <param name="newItem"></param>
     /// <returns></returns>
     [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] AirFlightDto newItem)
+    public async Task<IActionResult> Put(int id, [FromBody] AirFlightDto newItem)
     {
         var flight = mapper.Map<AirFlight>(newItem);
+        var checkUpdate = await repository.Update(id, flight);
 
-        if (!repository.Update(id, flight))
+        if (!checkUpdate)
             return NotFound();
         return Ok();
     }
@@ -80,10 +84,12 @@ public class AirFlightController(IRepository<AirFlight, int> repository, IMapper
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        if (!repository.Delete(id))
-            return NotFound();
+        var checkDelete = await repository.Delete(id);
+
+        if (!checkDelete)
+            return NotFound(); 
         return Ok();
     }
 }

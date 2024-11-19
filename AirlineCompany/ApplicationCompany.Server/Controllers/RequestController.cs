@@ -20,9 +20,10 @@ public class RequestController(RequestService service) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("FirstTask")]
-    public ActionResult<IEnumerable<AirFlight>> GetFlyightDepartureArrive(string departure, string arrive)
+    public async Task<ActionResult<IEnumerable<AirFlight>>> GetFlyightDepartureArrive(string departure, string arrive)
     {
-        return Ok(service.GetFlyightDepartureArrive(departure, arrive));
+        var res = await service.GetFlyightDepartureArrive(departure, arrive);
+        return Ok(res);
     }
 
 
@@ -32,9 +33,10 @@ public class RequestController(RequestService service) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("SecondTask")]
-    public ActionResult<IEnumerable<Passeneger>> GetPassenegersWeightFlight(int idFlight)
+    public async Task<ActionResult<IEnumerable<Passeneger>>> GetPassenegersWeightFlight(int idFlight)
     {
-        return Ok(service.GetPassenegersWeightFlight(idFlight));
+        var res = await service.GetPassenegersWeightFlight(idFlight);
+        return Ok(res);
     }
 
     /// <summary>
@@ -43,9 +45,10 @@ public class RequestController(RequestService service) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("ThirdTask")]
-    public ActionResult<IEnumerable<AirFlight>> GetFlyightPassengersDate(string planeModel, DateTime departure, DateTime arrive)
+    public async Task<ActionResult<IEnumerable<AirFlight>>> GetFlyightPassengersDate(string planeModel, DateTime departure, DateTime arrive)
     {
-        return Ok(service.GetFlyightPassengersDate(planeModel, departure, arrive ));
+        var res = await service.GetFlyightPassengersDate(planeModel, departure, arrive);
+        return Ok(res);
     }
 
     /// <summary>
@@ -53,9 +56,10 @@ public class RequestController(RequestService service) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("FourthTask")]
-    public ActionResult<IEnumerable<AirFlightNumberPassangers>> GetFlyightTopPassengers()
+    public async Task<ActionResult<IEnumerable<AirFlightNumberPassangers>>> GetFlyightTopPassengers()
     {
-        return Ok(service.GetFlyightTopPassengers());
+        var res = await service.GetFlyightTopPassengers();
+        return Ok(res);
     }
 
 
@@ -64,9 +68,10 @@ public class RequestController(RequestService service) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("FifthTask")]
-    public ActionResult<IEnumerable<AirFlight>> GetFlyightMinTime()
+    public async Task<ActionResult<IEnumerable<AirFlight>>> GetFlyightMinTime()
     {
-        return Ok(service.GetFlyightMinTime());
+        var res = await service.GetFlyightMinTime();
+        return Ok(res);
     }
 
 
@@ -76,8 +81,9 @@ public class RequestController(RequestService service) : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("SixthTask")]
-    public ActionResult<IEnumerable<double>> GetFlyightMaxAvrWeight()
+    public async Task<ActionResult<IEnumerable<double>>> GetFlyightMaxAvrWeight(string departure)
     {
-        return Ok(service.GetFlyightMaxAvrWeight());
+        var res = await service.GetFlyightMaxAvrWeight(departure);
+        return Ok(res);
     }
 }

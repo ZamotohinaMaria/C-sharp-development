@@ -70,7 +70,7 @@ public class AirlineCompanyTest(AirlineCompanyFixture fixture): IClassFixture<Ai
 
         var flyightPassengersDate =
             (from fly in flyFixture
-            where fly.PlaneType.Model == planeModel &&
+            where fly.Plane.Model == planeModel &&
             fly.Departure >= departure &&
             fly.Departure <= arrive
             select fly).ToList();
