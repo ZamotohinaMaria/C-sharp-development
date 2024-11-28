@@ -9,7 +9,10 @@ namespace AirlineCompany.Server.Services;
 /// <summary>
 /// Класс предоставляет методы, которые реализуют основыне запросы по заданию
 /// </summary>
-public class RequestService(IDbRepository<AirFlight, int> airFlightRepository, IDbRepository<Passeneger, int> passengerRepository)
+public class RequestService(
+    IDbRepository<AirFlight, int> airFlightRepository,
+    IDbRepository<Passeneger, int> passengerRepository
+    )
 {
     /// <summary>
     /// 1) Вывести сведения о всех авиарейсах, вылетевших из указанного пункта отправления

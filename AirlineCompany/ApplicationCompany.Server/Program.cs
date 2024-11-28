@@ -1,31 +1,39 @@
+using AirlineCompany.Domain;
 using AirlineCompany.Domain.Models;
-using AirlineCompany.Domain.Repositories.ByList;
+using AirlineCompany.Domain.Repositories.DataBase;
 using AirlineCompany.Domain.Interfaces;
 using AirlineCompany.ApplicationServices;
 using AirlineCompany.Server.Services;
 
 using AutoMapper.Configuration;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using AutoMapper;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+var connectionString = builder.Configuration.GetConnectionString("MySql");
+builder.Services.AddDbContext<AirlineCompanyDbContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 // Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IRepository<Plane, int>, PlaneRepositoryList>();
-builder.Services.AddSingleton<IRepository<AirFlight, int>, AirFlightRepositoryList>();
-builder.Services.AddSingleton<IRepository<Passeneger, int>, PassengerRepositoryList>();
-builder.Services.AddSingleton<RequestService>();
 
-builder.Services.AddSingleton(provider => new MapperConfiguration(config =>
-{
-    config.AddProfile(new AirlineCompaneMapper(provider.GetRequiredService<IRepository<Plane, int>>()));
-}).CreateMapper());
+builder.Services.AddTransient<IDbRepository<Plane, int>, PlaneRepositoryDb>();
+builder.Services.AddTransient<IDbRepository<AirFlight, int>, AirFlightRepositoryDb>();
+builder.Services.AddTransient<IDbRepository<Passeneger, int>, PassengerRepositoryDb>();
+builder.Services.AddTransient<RequestService>();
+
+//builder.Services.AddScoped(provider => new MapperConfiguration(config =>
+//{
+//    config.AddProfile(new AirlineCompaneMapper(provider.GetRequiredService<IDbRepository<Plane, int>>()));
+//}).CreateMapper());
+builder.Services.AddAutoMapper(typeof(AirlineCompaneMapper));
 
 builder.Services.AddSwaggerGen(c =>
 {

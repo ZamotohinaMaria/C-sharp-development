@@ -27,7 +27,7 @@ public class PassengerController(IDbRepository<Passeneger, int> repository, IMap
         var passengers =await repository.GetAll();
 
         if (passengers == null) return NotFound();
-        return Ok();
+        return Ok(passengers);
     }
 
     /// <summary>

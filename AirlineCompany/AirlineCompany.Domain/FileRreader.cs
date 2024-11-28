@@ -31,6 +31,7 @@ public static class FileRreader
 
             tokens = tokens.Select(token => token.Trim('"')).ToArray();
             var plane = _planes.Find(p => p.Model == tokens[6]);
+            plane ??= new Plane { IdPlane = _planes.Count, Efficiency = 0, LoadCapacity = 0, Model = "none", PassengerMax = 0 };
             var flight = new AirFlight
             {
                 Idflight = flyId++,
@@ -40,7 +41,8 @@ public static class FileRreader
                 Departure = DateTime.ParseExact(tokens[3], "yyyy-MM-dd HH:m:s", CultureInfo.InvariantCulture),
                 Arrive = DateTime.Parse(tokens[4]),
                 FlyingTime = TimeOnly.Parse(tokens[5]),
-                Plane = plane ?? new Plane { IdPlane = _planes.Count, Efficiency = 0, LoadCapacity = 0, Model = "none", PassengerMax = 0 }
+                Plane = plane,
+                PlaneId = plane.IdPlane
             };
 
             airFlights.Add(flight);

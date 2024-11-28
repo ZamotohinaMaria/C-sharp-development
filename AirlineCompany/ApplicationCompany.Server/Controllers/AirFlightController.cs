@@ -28,7 +28,7 @@ public class AirFlightController(IDbRepository<AirFlight, int> repository, IMapp
         var flights = await repository.GetAll();
 
         if (flights == null) return NotFound();
-        return Ok();
+        return Ok(flights);
     }
 
 

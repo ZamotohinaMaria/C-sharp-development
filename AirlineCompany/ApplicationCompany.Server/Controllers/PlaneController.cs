@@ -26,7 +26,7 @@ public class PlaneController(IDbRepository<Plane, int> repository, IMapper mappe
         var planes = await repository.GetAll();
 
         if (planes == null) return NotFound();
-        return Ok();
+        return Ok(planes);
     }
 
     /// <summary>

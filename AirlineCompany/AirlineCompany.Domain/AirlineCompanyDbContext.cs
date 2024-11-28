@@ -14,5 +14,15 @@ public class AirlineCompanyDbContext(DbContextOptions<AirlineCompanyDbContext> o
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+
+        modelBuilder.Entity<AirFlight>(entity =>
+        {
+            entity.HasOne(e => e.Plane)
+                    .WithMany()
+                    .HasForeignKey(p => p.PlaneId)
+                    .OnDelete(DeleteBehavior.Cascade);
+        }
+            );
     }
 }
