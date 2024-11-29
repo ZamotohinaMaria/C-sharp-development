@@ -21,7 +21,7 @@ public class AirlineCompaneMapper : Profile
         //.ReverseMap()
         //.ForMember(dest => dest.Plane, member => member.MapFrom(src => planeRepository.GetById(src.IdPlane)))
         //.ForMember(dest => dest.FlyingTime, member => member.MapFrom(src => TimeOnly.FromTimeSpan(src.Arrive - src.Departure)));
-        CreateMap<AirFlight, AirFlightDto>().ReverseMap();
+        CreateMap<AirFlight, AirFlightDto>().ReverseMap().ForMember(dest => dest.FlyingTime, member => member.MapFrom(src => TimeOnly.FromTimeSpan(src.Arrive - src.Departure)));
         CreateMap<Plane, PlaneDto>().ReverseMap();
         CreateMap<Passeneger, PassengerDto>().ReverseMap();
     }

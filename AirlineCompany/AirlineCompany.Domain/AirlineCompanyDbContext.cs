@@ -15,14 +15,17 @@ public class AirlineCompanyDbContext(DbContextOptions<AirlineCompanyDbContext> o
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<AirFlight>().HasData(FileRreader.ReadAirFlightsDb("Data/airflyights.csv"));
+        modelBuilder.Entity<Plane>().HasData(FileRreader.ReadPlanes("Data/planes.csv"));
+        modelBuilder.Entity<Passeneger>().HasData(FileRreader.ReadPassengers("Data/passengers.csv"));
 
         modelBuilder.Entity<AirFlight>(entity =>
-        {
-            entity.HasOne(e => e.Plane)
-                    .WithMany()
-                    .HasForeignKey(p => p.PlaneId)
-                    .OnDelete(DeleteBehavior.Cascade);
-        }
-            );
+            {
+                entity.HasOne(e => e.Plane)
+                        .WithMany()
+                        .HasForeignKey(p => p.PlaneId)
+                        .OnDelete(DeleteBehavior.Cascade);
+            }
+        );
     }
 }

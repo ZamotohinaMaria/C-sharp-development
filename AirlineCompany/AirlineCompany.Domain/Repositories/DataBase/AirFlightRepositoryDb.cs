@@ -73,7 +73,7 @@ public class AirFlightRepositoryDb(AirlineCompanyDbContext context): IDbReposito
         flight.Departure = newValue.Departure;
         flight.Arrive = newValue.Arrive;
         flight.FlyingTime = newValue.FlyingTime;
-        flight.Plane = newValue.Plane;
+        flight.PlaneId = newValue.Plane.IdPlane;
 
         context.AirFlights.Update(flight);
         await context.SaveChangesAsync();
