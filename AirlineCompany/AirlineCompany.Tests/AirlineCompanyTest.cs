@@ -108,7 +108,17 @@ public class AirlineCompanyTest(AirlineCompanyFixture fixture): IClassFixture<Ai
                  Count = c 
              }).Take(5).ToList();
 
+        foreach (var item in expected.ToList())
+        {
+            Console.WriteLine(item.Fly.Idflight);
+            Console.WriteLine(item.Count);
+        }
 
+        foreach (var item in flyightTopPassengers)
+        {
+            Console.WriteLine(item.Fly.Idflight);
+            Console.WriteLine(item.Count);
+        }
         Assert.True(flyightTopPassengers.Count != 0);
         Assert.Equal(expected, flyightTopPassengers);
     }
