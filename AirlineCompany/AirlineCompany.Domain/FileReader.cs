@@ -20,7 +20,7 @@ public static class FileReader
     {
         using var reader = new StreamReader(filename);
         var airFlights = new List<AirFlight>();
-        var flyId = 1;
+        var flyId = 0;
 
         while (!reader.EndOfStream)
         {
