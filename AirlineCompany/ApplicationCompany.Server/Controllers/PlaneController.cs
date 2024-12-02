@@ -1,4 +1,4 @@
-using AirlineCompany.Domain.Interfaces;
+п»їusing AirlineCompany.Domain.Interfaces;
 using AirlineCompany.Domain.Models;
 using AirlineCompany.Domain.Repositories.ByList;
 using AirlineCompany.ApplicationServices.DTO;
@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AirlineCompany.Server.Controllers;
 
 /// <summary>
-/// Класс для работы с данными самолетов из формы
+/// РљР»Р°СЃСЃ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ РґР°РЅРЅС‹РјРё СЃР°РјРѕР»РµС‚РѕРІ РёР· С„РѕСЂРјС‹
 /// </summary>
 /// <param name="repository"></param>
 /// <param name="mapper"></param>
@@ -17,7 +17,7 @@ namespace AirlineCompany.Server.Controllers;
 public class PlaneController(IDbRepository<Plane, int> repository, IMapper mapper) : ControllerBase
 {
     /// <summary>
-    /// Вернуть все самолеты
+    /// Р’РµСЂРЅСѓС‚СЊ РІСЃРµ СЃР°РјРѕР»РµС‚С‹
     /// </summary>
     /// <returns></returns>
     [HttpGet]
@@ -30,7 +30,7 @@ public class PlaneController(IDbRepository<Plane, int> repository, IMapper mappe
     }
 
     /// <summary>
-    /// Вернуть смолет по id
+    /// Р’РµСЂРЅСѓС‚СЊ СЃРјРѕР»РµС‚ РїРѕ id
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
@@ -46,7 +46,7 @@ public class PlaneController(IDbRepository<Plane, int> repository, IMapper mappe
     }
 
     /// <summary>
-    /// Добавить самолет
+    /// Р”РѕР±Р°РІРёС‚СЊ СЃР°РјРѕР»РµС‚
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
@@ -59,7 +59,7 @@ public class PlaneController(IDbRepository<Plane, int> repository, IMapper mappe
     }
 
     /// <summary>
-    /// Изменить самолет по id
+    /// РР·РјРµРЅРёС‚СЊ СЃР°РјРѕР»РµС‚ РїРѕ id
     /// </summary>
     /// <param name="id"></param>
     /// <param name="newItem"></param>
@@ -76,7 +76,7 @@ public class PlaneController(IDbRepository<Plane, int> repository, IMapper mappe
     }
 
     /// <summary>
-    /// Удалить самолет по id
+    /// РЈРґР°Р»РёС‚СЊ СЃР°РјРѕР»РµС‚ РїРѕ id
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>

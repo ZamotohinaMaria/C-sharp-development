@@ -7,7 +7,7 @@ namespace AirlineCompany.Domain;
 /// Читает данные из файлов
 /// </summary>
 /// <param name="fileName"></param>
-public static class FileRreader
+public static class FileReader
 {
     /// <summary>
     /// Получение списка полетов из файла
@@ -20,7 +20,7 @@ public static class FileRreader
     {
         using var reader = new StreamReader(filename);
         var airFlights = new List<AirFlight>();
-        var flyId = 0;
+        var flyId = 1;
 
         while (!reader.EndOfStream)
         {
@@ -30,9 +30,8 @@ public static class FileRreader
             var tokens = airLine.Split(';');
 
             tokens = tokens.Select(token => token.Trim('"')).ToArray();
-            var plane = _planes.Find(p => p.Model == tokens[6]);
-            plane ??= new Plane { IdPlane = _planes.Count, Efficiency = 0, LoadCapacity = 0, Model = "none", PassengerMax = 0 };
-            
+            var plane = _planes.Find(p => p.Model == tokens[6]) ?? new Plane { IdPlane = _planes.Count, Efficiency = 0, LoadCapacity = 0, Model = "none", PassengerMax = 0 };
+
             var flight = new AirFlight
             {
                 Idflight = flyId++,
@@ -65,8 +64,7 @@ public static class FileRreader
             var tokens = airLine.Split(';');
 
             tokens = tokens.Select(token => token.Trim('"')).ToArray();
-            var plane = _planes.Find(p => p.Model == tokens[6]);
-            plane ??= new Plane { IdPlane = _planes.Count, Efficiency = 0, LoadCapacity = 0, Model = "none", PassengerMax = 0 };
+            var plane = _planes.Find(p => p.Model == tokens[6]) ?? new Plane { IdPlane = _planes.Count, Efficiency = 0, LoadCapacity = 0, Model = "none", PassengerMax = 0 };
 
             var flight = new AirFlight
             {

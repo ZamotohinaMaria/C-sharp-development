@@ -1,9 +1,10 @@
 ﻿using AirlineCompany.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace AirlineCompany.Domain;
 
-public class AirlineCompanyDbContext(DbContextOptions<AirlineCompanyDbContext> options): DbContext(options)
+public class AirlineCompanyDbContext(DbContextOptions<AirlineCompanyDbContext> options) : DbContext(options)
 {
     public DbSet<AirFlight> AirFlights { get; set; }
 
@@ -15,9 +16,9 @@ public class AirlineCompanyDbContext(DbContextOptions<AirlineCompanyDbContext> o
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<AirFlight>().HasData(FileRreader.ReadAirFlightsDb("Data/airflyights.csv"));
-        modelBuilder.Entity<Plane>().HasData(FileRreader.ReadPlanes("Data/planes.csv"));
-        modelBuilder.Entity<Passeneger>().HasData(FileRreader.ReadPassengers("Data/passengers.csv"));
+        modelBuilder.Entity<AirFlight>().HasData(FileReader.ReadAirFlightsDb("Data/airflyights.csv"));
+        modelBuilder.Entity<Plane>().HasData(FileReader.ReadPlanes("Data/planes.csv"));
+        modelBuilder.Entity<Passeneger>().HasData(FileReader.ReadPassengers("Data/passengers.csv"));
 
         modelBuilder.Entity<AirFlight>(entity =>
             {
@@ -27,5 +28,11 @@ public class AirlineCompanyDbContext(DbContextOptions<AirlineCompanyDbContext> o
                         .OnDelete(DeleteBehavior.Cascade);
             }
         );
+
+        modelBuilder.Entity<Plane>()
+            .HasKey(s => s.IdPlane);
+
+        modelBuilder.Entity<Passeneger>()
+            .HasKey(s => s.IdPassenger);
     }
 }

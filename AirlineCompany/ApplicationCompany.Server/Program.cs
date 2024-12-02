@@ -1,4 +1,4 @@
-using AirlineCompany.Domain;
+п»їusing AirlineCompany.Domain;
 using AirlineCompany.Domain.Models;
 using AirlineCompany.Domain.Repositories.DataBase;
 using AirlineCompany.Domain.Interfaces;
@@ -29,17 +29,14 @@ builder.Services.AddTransient<IDbRepository<AirFlight, int>, AirFlightRepository
 builder.Services.AddTransient<IDbRepository<Passeneger, int>, PassengerRepositoryDb>();
 builder.Services.AddTransient<RequestService>();
 
-//builder.Services.AddScoped(provider => new MapperConfiguration(config =>
-//{
-//    config.AddProfile(new AirlineCompaneMapper(provider.GetRequiredService<IDbRepository<Plane, int>>()));
-//}).CreateMapper());
+
 builder.Services.AddAutoMapper(typeof(AirlineCompaneMapper));
 
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Airline Company API", Version = "v1" });
 
-    // Включаем XML комментарии (если используются)
+    // Р’РєР»СЋС‡Р°РµРј XML РєРѕРјРјРµРЅС‚Р°СЂРёРё (РµСЃР»Рё РёСЃРїРѕР»СЊР·СѓСЋС‚СЃСЏ)
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);

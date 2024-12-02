@@ -8,7 +8,7 @@ namespace AirlineCompany.Domain.Repositories.ByList;
 /// </summary>
 public class AirFlightRepositoryList : IRepository<AirFlight, int>
 {
-    private static readonly List<AirFlight> _flights = FileRreader.ReadAirFlights("Data/airflyights.csv");
+    private static readonly List<AirFlight> _flights = FileReader.ReadAirFlights("Data/airflyights.csv");
     private static int  _countFlights = _flights.Count;
 
     /// <summary>

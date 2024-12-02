@@ -14,13 +14,7 @@ public class AirlineCompaneMapper : Profile
     /// Метод для преобразования данных с формы в данные в объекты классов
     /// </summary>
     public AirlineCompaneMapper()
-    //IDbRepository<Plane, int> planeRepository
     {
-        //CreateMap<AirFlight, AirFlightDto>()
-        //.ForMember(dest => dest.IdPlane, member => member.MapFrom(src => src.Plane.IdPlane))
-        //.ReverseMap()
-        //.ForMember(dest => dest.Plane, member => member.MapFrom(src => planeRepository.GetById(src.IdPlane)))
-        //.ForMember(dest => dest.FlyingTime, member => member.MapFrom(src => TimeOnly.FromTimeSpan(src.Arrive - src.Departure)));
         CreateMap<AirFlight, AirFlightDto>().ReverseMap().ForMember(dest => dest.FlyingTime, member => member.MapFrom(src => TimeOnly.FromTimeSpan(src.Arrive - src.Departure)));
         CreateMap<Plane, PlaneDto>().ReverseMap();
         CreateMap<Passeneger, PassengerDto>().ReverseMap();

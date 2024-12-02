@@ -16,7 +16,7 @@ public class AirFlightRepositoryDb(AirlineCompanyDbContext context): IDbReposito
     /// <returns>Список элементов класса AirFlight</returns>  
     public async Task<List<AirFlight>> GetAll()
     {
-        return await context.AirFlights.ToListAsync();
+        return await context.AirFlights.Include(v => v.Plane).ToListAsync();
     }
 
     /// <summary>

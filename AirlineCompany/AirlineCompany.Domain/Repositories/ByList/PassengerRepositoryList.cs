@@ -9,7 +9,7 @@ namespace AirlineCompany.Domain.Repositories.ByList;
 /// </summary>
 public class PassengerRepositoryList : IRepository<Passeneger, int>
 {
-    private static readonly List<Passeneger> _passengres = FileRreader.ReadPassengers("Data/passengers.csv");
+    private static readonly List<Passeneger> _passengres = FileReader.ReadPassengers("Data/passengers.csv");
     private static int _countPassengers = _passengres.Count;
 
     /// <summary>
