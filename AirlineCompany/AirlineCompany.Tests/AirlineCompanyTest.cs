@@ -41,7 +41,7 @@ public class AirlineCompanyTest(AirlineCompanyFixture fixture): IClassFixture<Ai
         var passFixture = _fixture.Passengers;
 
         var expected = new List<Passeneger>() { passFixture[8], passFixture[0]};
-        var IdFlight = 4;
+        var IdFlight = 5;
 
         var passenegersWeightFlight =
             (from pass in passFixture
