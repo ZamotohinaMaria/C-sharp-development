@@ -79,7 +79,7 @@ public class RequestService(
 
         var flyightTopPassengers =
             (from fly in airFlights
-             let c = passengers.Count(pass => pass.IdFlight == fly.Idflight)
+             let c = passengers.Count(pass => pass.IdFlight == fly.IdFlight)
              orderby c descending
              select new
              {
@@ -121,7 +121,7 @@ public class RequestService(
 
         var flightWeight =
             from fly in airFlights
-            join pass in passengers on fly.Idflight equals pass.IdFlight
+            join pass in passengers on fly.IdFlight equals pass.IdFlight
             where fly.DeparturePoint == departure
             select new
             {

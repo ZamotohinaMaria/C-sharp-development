@@ -27,7 +27,7 @@ public class AirFlightRepositoryList : IRepository<AirFlight, int>
     /// <returns>Элемент класса AirFlight</returns>
     public AirFlight? GetById(int id)
     {
-        return _flights.Find(f => f.Idflight == id);
+        return _flights.Find(f => f.IdFlight == id);
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public class AirFlightRepositoryList : IRepository<AirFlight, int>
     /// <param name="newItem"></param>
     public void Add(AirFlight newItem)
     {
-        newItem.Idflight = _countFlights++;
+        newItem.IdFlight = _countFlights++;
         _flights.Add(newItem);
     }
 

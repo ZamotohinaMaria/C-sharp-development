@@ -34,7 +34,7 @@ public static class FileReader
 
             var flight = new AirFlight
             {
-                Idflight = flyId++,
+                IdFlight = flyId++,
                 CodeNumber = tokens[0],
                 DeparturePoint = tokens[1],
                 ArrivalPoint = tokens[2],
@@ -68,7 +68,7 @@ public static class FileReader
 
             var flight = new AirFlight
             {
-                Idflight = flyId++,
+                IdFlight = flyId++,
                 CodeNumber = tokens[0],
                 DeparturePoint = tokens[1],
                 ArrivalPoint = tokens[2],

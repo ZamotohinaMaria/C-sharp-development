@@ -14,7 +14,7 @@ public class AirFlight
     /// </summary>
     [Key]
     [Column("id_flight")]
-    public required int Idflight { get; set; }
+    public required int IdFlight { get; set; }
 
     /// <summary>
     /// Кодовый номер рейса

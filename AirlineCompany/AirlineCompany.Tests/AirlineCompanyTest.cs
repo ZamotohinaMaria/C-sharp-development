@@ -41,12 +41,12 @@ public class AirlineCompanyTest(AirlineCompanyFixture fixture): IClassFixture<Ai
         var passFixture = _fixture.Passengers;
 
         var expected = new List<Passeneger>() { passFixture[8], passFixture[0]};
-        var idFlight = 4;
+        var IdFlight = 4;
 
         var passenegersWeightFlight =
             (from pass in passFixture
              orderby pass.FullName descending
-             where pass.IdFlight == idFlight && pass.BaggageWeight == 0
+             where pass.IdFlight == IdFlight && pass.BaggageWeight == 0
              select pass).ToList();
 
         Assert.True(passenegersWeightFlight.Count != 0);
@@ -100,7 +100,7 @@ public class AirlineCompanyTest(AirlineCompanyFixture fixture): IClassFixture<Ai
 
         var flyightTopPassengers =
             (from fly in flyFixture
-             let c = passFixture.Count(pass => pass.IdFlight == fly.Idflight)
+             let c = passFixture.Count(pass => pass.IdFlight == fly.IdFlight)
              orderby c descending
              select new 
              { 
@@ -110,13 +110,13 @@ public class AirlineCompanyTest(AirlineCompanyFixture fixture): IClassFixture<Ai
 
         foreach (var item in expected.ToList())
         {
-            Console.WriteLine(item.Fly.Idflight);
+            Console.WriteLine(item.Fly.IdFlight);
             Console.WriteLine(item.Count);
         }
 
         foreach (var item in flyightTopPassengers)
         {
-            Console.WriteLine(item.Fly.Idflight);
+            Console.WriteLine(item.Fly.IdFlight);
             Console.WriteLine(item.Count);
         }
         Assert.True(flyightTopPassengers.Count != 0);
@@ -157,7 +157,7 @@ public class AirlineCompanyTest(AirlineCompanyFixture fixture): IClassFixture<Ai
 
         var flightWeight =
             from fly in flyFixture
-            join pass in passFixture on fly.Idflight equals pass.IdFlight
+            join pass in passFixture on fly.IdFlight equals pass.IdFlight
             where fly.DeparturePoint == departure
             select new
             {
