@@ -25,8 +25,11 @@ namespace AirlineCompany.Domain.Migrations
             modelBuilder.Entity("AirlineCompany.Domain.Models.AirFlight", b =>
                 {
                     b.Property<int>("IdFlight")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id_flight");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdFlight"));
 
                     b.Property<string>("ArrivalPoint")
                         .IsRequired()
@@ -209,6 +212,8 @@ namespace AirlineCompany.Domain.Migrations
                         .HasColumnName("ticket_number");
 
                     b.HasKey("IdPassenger");
+
+                    b.HasIndex("IdFlight");
 
                     b.ToTable("passengers");
 
@@ -518,12 +523,6 @@ namespace AirlineCompany.Domain.Migrations
 
             modelBuilder.Entity("AirlineCompany.Domain.Models.AirFlight", b =>
                 {
-                    b.HasOne("AirlineCompany.Domain.Models.Passeneger", null)
-                        .WithMany()
-                        .HasForeignKey("IdFlight")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AirlineCompany.Domain.Models.Plane", "Plane")
                         .WithMany()
                         .HasForeignKey("PlaneId")
@@ -531,6 +530,15 @@ namespace AirlineCompany.Domain.Migrations
                         .IsRequired();
 
                     b.Navigation("Plane");
+                });
+
+            modelBuilder.Entity("AirlineCompany.Domain.Models.Passeneger", b =>
+                {
+                    b.HasOne("AirlineCompany.Domain.Models.Passeneger", null)
+                        .WithMany()
+                        .HasForeignKey("IdFlight")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

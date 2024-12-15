@@ -69,6 +69,6 @@ public class AirFlight
     [Column("id_plane")]
     [Required]
     public required int PlaneId { get; set; }
-    public Plane Plane { get; set; }
+    public Plane? Plane { get; set; }
 }
 

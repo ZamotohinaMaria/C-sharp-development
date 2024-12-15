@@ -1,0 +1,204 @@
+﻿@page "/AirFlights"
+@using System.Globalization;
+@inject HttpClient Http
+
+<PageTitle>AirFlights</PageTitle>
+
+<h1>AirFlights</h1>
+
+<p>Список полетов.</p>
+
+<Button class="add-new-button" Clicked="@ShowAdd" Color="Blazorise.Color.Primary">
+    Добавить Абитуриента
+    @*<MudIcon Icon="@Icons.Material.Filled.Add" Color="MudBlazor.Color.Primary" />*@
+</Button>
+
+<div class="data-header">
+    <div class="cell">Id</div>
+    <div class="cell">Номер рейса</div>
+    <div class="cell">Пункт отправления</div>
+    <div class="cell">Пункт прибытия</div>
+    <div class="cell">Дата отправления</div>
+    <div class="cell">Дата прибытия</div>
+    <div class="cell">Время в пути</div>
+    <div class="cell">Тип самолета</div>
+</div>
+
+<div class="data-container">
+    @foreach (var flight in _airFlights)
+    {
+        <div class="data-row">
+            <div class="cell">@(flight.IdFlight)</div>
+            <div class="cell">@flight.DeparturePoint</div>
+            <div class="cell">@flight.ArrivalPoint</div>
+            <div class="cell">@flight.Departure.Day / @flight.Departure.Month / @flight.Departure.Year</div>
+            <div class="cell">@flight.Arrive.Day / @flight.Arrive.Month / @flight.Arrive.Year</div>
+            <div class="cell">@flight.FlyingTime.Hour : @flight.FlyingTime.Minute : @flight.FlyingTime.Second</div>
+            <div class="cell">@flight.Plane.Model</div>
+
+            <Button Color="Blazorise.Color.Primary"
+                    class="edit-item"
+                    @onclick="@(() => ShowUpdate(flight.IdFlight))"
+                    Style="max-width: 89px"
+                    TextAlignment="TextAlignment.Center">
+                UPDATE
+            </Button>
+            <Button Color="Blazorise.Color.Danger"
+                    class="edit-item"
+                    @onclick="@(() => DeleteFlight(flight.IdFlight))"
+                    Style="max-width: 89px"
+                    TextAlignment="TextAlignment.Center">
+                DELETE
+            </Button>
+        </div>
+    }
+</div>
+
+<Modal @ref="modalRef">
+    <ModalContent Centered>
+        <ModalHeader>
+            <h5>Добавить полет</h5>
+        </ModalHeader>
+        <ModalBody>
+            <div class="mb-3">
+                <label for="codeNumber">Номер рейса</label>
+                <input type="text" id="codeNumber" @bind="newAirFlifgt.CodeNumber" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="departurePoint">Пункт отправления</label>
+                <input type="text" id="departurePoint" @bind="newAirFlifgt.DeparturePoint" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="arrivalPoint">Пункт отправления</label>
+                <input type="text" id="arrivalPoint" @bind="newAirFlifgt.ArrivalPoint" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="departure">Пункт отправления</label>
+                <input type="datetime" id="departure" @bind="newAirFlifgt.Departure" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="arrival">Пункт отправления</label>
+                <input type="datetime" id="arrival" @bind="newAirFlifgt.Arrive" class="form-control" />
+            </div>
+            <select id="plane" @bind="newAirFlifgt.Plane.IdPlane">
+                @foreach (var plane in _planes)
+                {
+                    <option value="@plane.IdPlane">@plane.IdPlane @plane.Model</option>
+                }
+            </select>
+        </ModalBody>
+
+        <ModalFooter>
+            <Button Color="Blazorise.Color.Primary" Clicked="@(forAdd ? AddNewFlight : UpdateFlidht)">
+                @(forAdd ? "Добавить" : "Изменить")
+            </Button>
+            <Button Color="Blazorise.Color.Secondary" Clicked="@CancelHandler">
+                Отмена
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+
+@code {
+    private List<AirFlight> _airFlights = new();
+    private List<Plane> _planes = new();
+
+    private Modal? modalRef = null!;
+    private AirFlight newAirFlifgt = new()
+        {
+            IdFlight = 0,
+            CodeNumber = "0000",
+            DeparturePoint = "",
+            ArrivalPoint = "",
+            Departure = DateTime.Now,
+            Arrive = DateTime.Now,
+            FlyingTime = TimeOnly.Parse("00:00:00"),
+            PlaneId = 0,
+            Plane = null
+        };
+    private bool forAdd = true;
+    private string flightUrl = "api/AirFlights";
+    
+    private async Task UpdateMainList()
+    {
+        var response = await Http.GetFromJsonAsync<List<AirFlight>>(flightUrl);
+        if (response != null)
+        {
+            _airFlights = response;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UpdateMainList();
+    }
+
+    private async Task ShowUpdate(int flightId)
+    {
+        forAdd = false;
+        var response = await Http.GetFromJsonAsync<AirFlight>($"{flightUrl}/{flightId}");
+        if (response != null)
+        {
+            newAirFlifgt = response;
+        }
+        await modalRef!.Show();
+    }
+    
+    private async Task ShowAdd()
+    {
+        forAdd = true;
+        newAirFlifgt = new()
+            {
+                IdFlight = 0,
+                CodeNumber = "0000",
+                DeparturePoint = "",
+                ArrivalPoint = "",
+                Departure = DateTime.Now,
+                Arrive = DateTime.Now,
+                FlyingTime = TimeOnly.Parse("00:00:00"),
+                PlaneId = 0,
+                Plane = null
+            }; 
+            await modalRef!.Show();
+    }
+
+
+    
+    private async Task CancelHandler()
+    {
+        await modalRef!.Hide();
+    }
+
+    private async Task AddNewFlight()
+    {
+        await Http.PostAsJsonAsync<AirFlight>(flightUrl, newAirFlifgt);
+        await UpdateMainList();
+        await modalRef!.Hide();
+    }
+
+    private async Task UpdateFlidht()
+    {
+        await Http.PutAsJsonAsync($"{flightUrl}/{newAirFlifgt.IdFlight}", newAirFlifgt);
+
+        newAirFlifgt = new()
+            {
+                IdFlight = 0,
+                CodeNumber = "0000",
+                DeparturePoint = "",
+                ArrivalPoint = "",
+                Departure = DateTime.Now,
+                Arrive = DateTime.Now,
+                FlyingTime = TimeOnly.Parse("00:00:00"),
+                PlaneId = 0,
+                Plane = null
+            }; await UpdateMainList();
+        await modalRef!.Hide();
+    }
+
+    private async Task DeleteFlight(int flightId)
+    {
+        await Http.DeleteAsync($"{flightUrl}/{flightId}");
+        await UpdateMainList();
+    }
+}

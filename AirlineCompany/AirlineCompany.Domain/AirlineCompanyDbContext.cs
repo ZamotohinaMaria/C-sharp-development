@@ -21,21 +21,23 @@ public class AirlineCompanyDbContext(DbContextOptions<AirlineCompanyDbContext> o
         modelBuilder.Entity<Passeneger>().HasData(FileReader.ReadPassengers("Data/passengers.csv"));
 
         modelBuilder.Entity<AirFlight>(entity =>
-            {
-                entity.HasOne(e => e.Plane)
-                        .WithMany()
-                        .HasForeignKey(p => p.PlaneId)
-                        .OnDelete(DeleteBehavior.Cascade);
-            }
+        {
+            entity.HasOne(e => e.Plane)
+                    .WithMany()
+                    .HasForeignKey(p => p.PlaneId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+        }
         );
 
         modelBuilder.Entity<Passeneger>(entity =>
-            {
-                entity.HasMany<AirFlight>()
-                        .WithOne()
-                        .HasForeignKey(p => p.IdFlight)
-                        .OnDelete(DeleteBehavior.Cascade);
-            }
+        {
+
+            entity.HasOne<Passeneger>()
+                    .WithMany()
+                    .HasForeignKey(p => p.IdFlight)
+                    .OnDelete(DeleteBehavior.Cascade);
+        }
         );
     }
 }
