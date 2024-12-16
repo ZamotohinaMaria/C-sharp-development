@@ -1,0 +1,215 @@
+﻿@page "/passengers"
+@inject HttpClient Http
+
+<PageTitle>Passengers</PageTitle>
+
+<h1>Passengers</h1>
+
+<p>Список пассажиров.</p>
+
+<Button class="add-new-button" Clicked="@ShowAdd" Color="Blazorise.Color.Primary">
+    Добавить Пассажира
+</Button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Фио</th>
+            <th>Номер пасспорта</th>
+            <th>Номер билета</th>
+            <th>Номер места</th>
+            <th>Вес багажа</th>
+            <th>Номер рейса</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var pass in _passengers)
+        {
+            <tr>
+                <td>@(pass.IdPassenger)</td>
+                <td>@pass.FullName</td>
+                <td>@pass.Passport</td>
+                <td>@pass.TicketNumber</td>
+                <td>@pass.SeatNumber</td>
+                <td>@pass.BaggageWeight</td>
+                <td>@pass.IdFlight</td>
+                <td>
+                    <Button Color="Blazorise.Color.Primary"
+                            class="edit-item"
+                            @onclick="@(() => ShowUpdate(pass.IdPassenger))"
+                            Style="max-width: 89px"
+                            TextAlignment="TextAlignment.Center">
+                        UPDATE
+                    </Button>
+                </td>
+                <td>
+                    <Button Color="Blazorise.Color.Danger"
+                            class="edit-item"
+                            @onclick="@(() => DeleteItem(pass.IdPassenger))"
+                            Style="max-width: 89px"
+                            TextAlignment="TextAlignment.Center">
+                        DELETE
+                    </Button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<Modal @ref="modalRef">
+    <ModalContent Centered>
+        <ModalHeader>
+            <h5>Добавить пассажира</h5>
+        </ModalHeader>
+        <ModalBody>
+            <div class="mb-3">
+                <label for="fullName">ФИО пассажира</label>
+                <input type="text" id="fullName" @bind="newPassenger.FullName" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="passport">Номер паспорта</label>
+                <input type="text" id="passport" @bind="newPassenger.Passport" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="registration">Флаг регистрации</label>
+                <input type="bool" id="registration" @bind="newPassenger.Registration" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="ticketNumber">Номер билета</label>
+                <input type="text" id="ticketNumber" @bind="newPassenger.TicketNumber" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="seatNumber">Номер места</label>
+                <input type="text" id="seatNumber" @bind="newPassenger.SeatNumber" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="baggageWeight">Вес багажа</label>
+                <input type="double" id="baggageWeight" @bind="newPassenger.BaggageWeight" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="idFlight">Номер рейса</label>
+                <input type="int" id="idFlight" @bind="newPassenger.IdFlight" class="form-control" />
+            </div>
+            @*<select id="plane" @bind="newPassenger.Plane.IdPlane">
+            @foreach (var plane in _planes)
+            {
+            <option value="@plane.IdPlane">@plane.IdPlane @plane.Model</option>
+            }
+            </select>*@
+        </ModalBody>
+
+        <ModalFooter>
+            <Button Color="Blazorise.Color.Primary" Clicked="@(forAdd ? AddNewItem : UpdateItem)">
+                @(forAdd ? "Добавить" : "Изменить")
+            </Button>
+            <Button Color="Blazorise.Color.Secondary" Clicked="@CancelHandler">
+                Отмена
+            </Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+
+@code {
+    private List<Passeneger> _passengers = new();
+
+    private Modal? modalRef = null!;
+    private Passeneger newPassenger = new()
+        {
+            IdPassenger = 0,
+            FullName = "Иванов Иван Иванович",
+            Passport = "4444 335566",
+            Registration = true,
+            TicketNumber = "10101010",
+            SeatNumber = "A00",
+            BaggageWeight = 0,
+            IdFlight = 0
+        };
+    private bool forAdd = true;
+    private string passengerUrl = "api/Passenger";
+
+    private async Task UpdateMainList()
+    {
+        var response = await Http.GetFromJsonAsync<List<Passeneger>>(passengerUrl);
+        if (response != null)
+        {
+            _passengers = response;
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UpdateMainList();
+    }
+
+    private async Task ShowUpdate(int passengerId)
+    {
+        forAdd = false;
+        var response = await Http.GetFromJsonAsync<Passeneger>($"{passengerUrl}/{passengerId}");
+        if (response != null)
+        {
+            newPassenger = response;
+        }
+        await modalRef!.Show();
+    }
+
+    private async Task ShowAdd()
+    {
+        forAdd = true;
+        newPassenger = new()
+            {
+                IdPassenger = 0,
+                FullName = "Иванов Иван Иванович",
+                Passport = "4444 335566",
+                Registration = true,
+                TicketNumber = "10101010",
+                SeatNumber = "A00",
+                BaggageWeight = 0,
+                IdFlight = 0
+            };
+        await UpdateMainList();
+        await modalRef!.Show();
+    }
+
+
+
+    private async Task CancelHandler()
+    {
+        await modalRef!.Hide();
+    }
+
+    private async Task AddNewItem()
+    {
+        await Http.PostAsJsonAsync<Passeneger>(passengerUrl, newPassenger);
+        await UpdateMainList();
+        await modalRef!.Hide();
+    }
+
+    private async Task UpdateItem()
+    {
+        await Http.PutAsJsonAsync($"{passengerUrl}/{newPassenger.IdPassenger}", newPassenger);
+
+        newPassenger = new()
+            {
+                IdPassenger = 0,
+                FullName = "Иванов Иван Иванович",
+                Passport = "4444 335566",
+                Registration = true,
+                TicketNumber = "10101010",
+                SeatNumber = "A00",
+                BaggageWeight = 0,
+                IdFlight = 0
+            }; 
+        await UpdateMainList();
+        await modalRef!.Hide();
+    }
+
+    private async Task DeleteItem(int passengerId)
+    {
+        await Http.DeleteAsync($"{passengerUrl}/{passengerId}");
+        await UpdateMainList();
+    }
+}

@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirlineCompany.ApplicationS
 		{0EFFFD03-718C-45A7-AF85-5B2E30589EA2} = {0EFFFD03-718C-45A7-AF85-5B2E30589EA2}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirlineCompany.Client", "AirlineCompany.Client\AirlineCompany.Client.csproj", "{508046C4-ED15-48F9-9CCD-6E7501B33D8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirlineCompany.Client", "AirlineCompany.Client\AirlineCompany.Client.csproj", "{508046C4-ED15-48F9-9CCD-6E7501B33D8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
