@@ -67,13 +67,15 @@ public class AirFlightRepositoryDb(AirlineCompanyDbContext context): IDbReposito
         var flight = await GetById(id);
         if (flight == null)
             return false;
+        //Console.WriteLine(newValue.Plane.IdPlane);
         flight.CodeNumber = newValue.CodeNumber;
         flight.DeparturePoint = newValue.DeparturePoint;
         flight.ArrivalPoint = newValue.ArrivalPoint;
         flight.Departure = newValue.Departure;
         flight.Arrive = newValue.Arrive;
         flight.FlyingTime = newValue.FlyingTime;
-        flight.PlaneId = newValue.Plane.IdPlane;
+        //flight.Plane = newValue.Plane;
+        flight.PlaneId = newValue.PlaneId;
 
         context.AirFlights.Update(flight);
         await context.SaveChangesAsync();

@@ -30,14 +30,14 @@ public class AirlineCompanyDbContext(DbContextOptions<AirlineCompanyDbContext> o
         }
         );
 
-        modelBuilder.Entity<Passeneger>(entity =>
-        {
+        //modelBuilder.Entity<Passeneger>(entity =>
+        //{
 
-            entity.HasOne<Passeneger>()
-                    .WithMany()
-                    .HasForeignKey(p => p.IdFlight)
-                    .OnDelete(DeleteBehavior.Cascade);
-        }
-        );
+        //    entity.HasOne<Passeneger>()
+        //            .WithMany()
+        //            .HasForeignKey(p => p.IdFlight)
+        //            .OnDelete(DeleteBehavior.Cascade);
+        //}
+        //);
     }
 }

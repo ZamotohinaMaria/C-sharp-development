@@ -1,0 +1,530 @@
+﻿@page "/requests"
+@using System.Globalization;
+@inject HttpClient Http
+
+<PageTitle>Requests</PageTitle>
+
+<h1>Requests</h1>
+
+<div class="task-container">
+    <h5>Вывести сведения о всех авиарейсах, вылетевших из указанного пункта отправления в указанный пункт прибытия.</h5>
+    <label for="departurePoint">Введите пункт отправления:</label>
+    <select id="departurePoint" @bind="departurePoint">
+        @foreach(var flight in _airFlights)
+        {
+            <option>@flight.DeparturePoint</option>
+        }
+    </select>
+    <label for="arrivePoint">Введите пункт прибытия:</label>
+    <select id="arrivePoint" @bind="arrivePoint">
+        @foreach (var flight in _airFlights)
+        {
+            <option>@flight.ArrivalPoint</option>
+        }
+    </select>
+    <div class="button-container">
+        <Button class="get-task-result" Color="Blazorise.Color.Primary" Clicked="@(() => ClickHandler(1))">
+            Получить результат
+        </Button>
+        <Button class="clear-task-result" Color="Blazorise.Color.Danger" Clicked="@(() => ClearTask(1))">
+            Очистить
+        </Button>
+    </div>
+
+    @if(request1 != null)
+    {
+        <div class="result-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Номер рейса</th>
+                        <th>Пункт отправления</th>
+                        <th>Пункт прибытия</th>
+                        <th>Дата отправления</th>
+                        <th>Дата прибытия</th>
+                        <th>Время в пути</th>
+                        <th>Тип самолета</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    @foreach (var flight in request1)
+                    {
+                        <tr>
+                            <td>@(flight.IdFlight)</td>
+                            <td>@(flight.CodeNumber)</td>
+                            <td>@flight.DeparturePoint</td>
+                            <td>@flight.ArrivalPoint</td>
+                            <td>@flight.Departure</td>
+                            <td>@flight.Arrive</td>
+                            <td>@flight.FlyingTime.ToLongTimeString()</td>
+                            <td>@flight.Plane.Model</td>
+                    
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>;
+    }
+    @if (request1 == null)
+    {
+        <div>Поданному запросу результатов нет</div>
+    }
+</div>
+<div class="task-container">
+    <h5>
+        Вывести сведения обо всех пассажирах, летящих данным рейсом, вес багажа которых равен нулю, упорядочить по ФИО.
+    </h5>
+    <label for="idFlight">Выберете рейс:</label>
+    <select id="idFlight" @bind="idFlight">
+        @foreach (var flight in _airFlights)
+        {
+            <option>@flight.IdFlight</option>
+        }
+    </select>
+    <p class="form-control" style="border: none">Номер рейса: @GetFlightCodeNumber(idFlight)</p>
+    <p class="form-control" style="border: none">Отправление: @GetFlightDeparturePoint(idFlight) -> @GetFlightDeparture(idFlight)</p>
+    <p class="form-control" style="border: none">Прибытие:  @GetFlightArrivePoint(idFlight) -> @GetFlightArrive(idFlight)</p>
+    <div class="button-container">
+        <Button class="get-task-result" Color="Blazorise.Color.Primary" Clicked="@(() => ClickHandler(2))">
+            Получить результат
+        </Button>
+        <Button class="clear-task-result" Color="Blazorise.Color.Danger" Clicked="@(() => ClearTask(2))">
+            Очистить
+        </Button>
+    </div>
+
+    @if (request2 != null)
+    {
+        <div class="result-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Фио</th>
+                        <th>Номер пасспорта</th>
+                        <th>Номер билета</th>
+                        <th>Номер места</th>
+                        <th>Вес багажа</th>
+                        <th>Номер рейса</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    @foreach (var pass in request2)
+                    {
+                        <tr>
+                            <td>@(pass.IdPassenger)</td>
+                            <td>@pass.FullName</td>
+                            <td>@pass.Passport</td>
+                            <td>@pass.TicketNumber</td>
+                            <td>@pass.SeatNumber</td>
+                            <td>@pass.BaggageWeight</td>
+                            <td>@pass.IdFlight</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    @if (request2 == null)
+    {
+        <div>Поданному запросу результатов нет</div>
+    }
+</div>
+<div class="task-container">
+    <h5>
+        Вывести сводную информацию обо всех полетах самолетов данного типа в указанный период времени.
+    </h5>
+    <label for="idFlight">Выберете модель самолета:</label>
+    <select id="planeModel" @bind="planeModel">
+        @foreach (var plane in _planes)
+        {
+            <option>@plane.Model</option>
+        }
+    </select>
+    <label>Дата отправления: </label>
+    <input type="datetime" id="departure" @bind="departure" />
+    <label>Дата прибытия: </label>
+    <input type="datetime" id="arrive" @bind="arrive" />
+    <div class="button-container">
+        <Button class="get-task-result" Color="Blazorise.Color.Primary" Clicked="@(() => ClickHandler(3))">
+            Получить результат
+        </Button>
+        <Button class="clear-task-result" Color="Blazorise.Color.Danger" Clicked="@(() => ClearTask(3))">
+            Очистить
+        </Button>
+    </div>
+
+    @if (request3 != null)
+    {
+        <div class="result-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Номер рейса</th>
+                        <th>Пункт отправления</th>
+                        <th>Пункт прибытия</th>
+                        <th>Дата отправления</th>
+                        <th>Дата прибытия</th>
+                        <th>Время в пути</th>
+                        <th>Тип самолета</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    @foreach (var flight in request3)
+                    {
+                        <tr>
+                            <td>@(flight.IdFlight)</td>
+                            <td>@(flight.CodeNumber)</td>
+                            <td>@flight.DeparturePoint</td>
+                            <td>@flight.ArrivalPoint</td>
+                            <td>@flight.Departure</td>
+                            <td>@flight.Arrive</td>
+                            <td>@flight.FlyingTime.ToLongTimeString()</td>
+                            <td>@flight.Plane.Model</td>
+
+                        </tr>
+                    }
+            </tbody>
+        </table>
+    </div>
+;
+    }
+    @if (request3 == null)
+    {
+        <div>Поданному запросу результатов нет</div>
+    }
+</div>
+<div class="task-container">
+    <h5>
+        Вывести топ 5 авиарейсов по количеству перевезённых пассажиров.
+    </h5>
+    <div class="button-container">
+        <Button class="get-task-result" Color="Blazorise.Color.Primary" Clicked="@(() => ClickHandler(4))">
+            Получить результат
+        </Button>
+        <Button class="clear-task-result" Color="Blazorise.Color.Danger" Clicked="@(() => ClearTask(4))">
+            Очистить
+        </Button>
+    </div>
+
+    @if (request4 != null)
+    {
+        <div class="result-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Номер рейса</th>
+                        <th>Пункт отправления</th>
+                        <th>Пункт прибытия</th>
+                        <th>Дата отправления</th>
+                        <th>Дата прибытия</th>
+                        <th>Время в пути</th>
+                        <th>Тип самолета</th>
+                        <th>Число перевезенных пассажиров</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    @foreach (var flight in request4)
+                    {
+                        <tr>
+                            <td>@(flight.Fly.IdFlight)</td>
+                            <td>@(flight.Fly.CodeNumber)</td>
+                            <td>@flight.Fly.DeparturePoint</td>
+                            <td>@flight.Fly.ArrivalPoint</td>
+                            <td>@flight.Fly.Departure</td>
+                            <td>@flight.Fly.Arrive</td>
+                            <td>@flight.Fly.FlyingTime.ToLongTimeString()</td>
+                            <td>@flight.Fly.Plane.Model</td>
+							<td><b>@flight.NumberPassengers</b></td>
+
+                        </tr>
+                    }
+            </tbody>
+        </table>
+    </div>
+    ;
+    }
+    @if (request4 == null)
+    {
+        <div>Поданному запросу результатов нет</div>
+    }
+</div>
+<div class="task-container">
+    <h5>
+        Вывести список рейсов с минимальным временем в пути.
+    </h5>
+    
+    <div class="button-container">
+        <Button class="get-task-result" Color="Blazorise.Color.Primary" Clicked="@(() => ClickHandler(5))">
+            Получить результат
+        </Button>
+        <Button class="clear-task-result" Color="Blazorise.Color.Danger" Clicked="@(() => ClearTask(5))">
+            Очистить
+        </Button>
+    </div>
+
+    @if (request5 != null)
+    {
+        <div class="result-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Номер рейса</th>
+                        <th>Пункт отправления</th>
+                        <th>Пункт прибытия</th>
+                        <th>Дата отправления</th>
+                        <th>Дата прибытия</th>
+                        <th>Время в пути</th>
+                        <th>Тип самолета</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    @foreach (var flight in request5)
+                    {
+                        <tr>
+                            <td>@(flight.IdFlight)</td>
+                            <td>@(flight.CodeNumber)</td>
+                            <td>@flight.DeparturePoint</td>
+                            <td>@flight.ArrivalPoint</td>
+                            <td>@flight.Departure</td>
+                            <td>@flight.Arrive</td>
+                            <td>@flight.FlyingTime.ToLongTimeString()</td>
+                            <td>@flight.Plane.Model</td>
+
+                        </tr>
+                    }
+            </tbody>
+        </table>
+    </div>
+;
+    }
+    @if (request5 == null)
+    {
+        <div>Поданному запросу результатов нет</div>
+    }
+</div>
+<div class="task-container">
+    <h5>
+        Вывести информацию о средней и максимальной загрузке авиарейсов из заданного пункта отправления.
+    </h5>
+    <label for="departurePoint2">Введите пункт отправления:</label>
+    <select id="departurePoint2" @bind="departurePoint2">
+        @foreach (var flight in _airFlights)
+        {
+            <option>@flight.DeparturePoint</option>
+        }
+    </select>
+    <div class="button-container">
+        <Button class="get-task-result" Color="Blazorise.Color.Primary" Clicked="@(() => ClickHandler(6))">
+            Получить результат
+        </Button>
+        <Button class="clear-task-result" Color="Blazorise.Color.Danger" Clicked="@(() => ClearTask(6))">
+            Очистить
+        </Button>
+    </div>
+
+    @if (request6 != null)
+    {
+        <div class="result-container">
+            <table class="table">
+                <thead>
+                    <tr>
+       
+                        <th>Средняя загрузка авиарейсов</th>
+                        <th>Максимальная загрузка авиарейсов</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    <tr>
+                        <td>@request6[0]</td>
+                        <td>@request6[1]</td>
+                    </tr>
+            </tbody>
+        </table>
+    </div>
+    ;
+    }
+    @if (request6 == null)
+    {
+        <div>Поданному запросу результатов нет</div>
+    }
+</div>
+
+
+@code {
+    private List<AirFlight> _airFlights = new();
+    private List<Passeneger> _passengers = new();
+    private List<Plane> _planes = new();
+
+    private Modal? _modalRef = null!;
+
+    private string passengerUrl = "api/Passenger";
+    private string flightUrl = "api/AirFlight";
+    private string planeUrl = "api/Plane";
+
+
+
+
+    private List<AirFlight> request1 = null!;
+    private List<Passeneger> request2 = null!;
+    private List<AirFlight> request3 = null!;
+    private List<AirFlightNumberPassangers> request4 = null!;
+    private List<AirFlight> request5 = null!;
+    private List<double> request6 = null!;
+
+    private string _errorMessage = "";
+
+    private async Task LoadAirFlights()
+    {
+        var responseFlight = await Http.GetFromJsonAsync<List<AirFlight>>(flightUrl);
+        if (responseFlight != null)
+        {
+            _airFlights = responseFlight;
+        }
+    }
+
+    private async Task LoadPassengers()
+    {
+        var responsePassenger = await Http.GetFromJsonAsync<List<Passeneger>>(passengerUrl);
+        if (responsePassenger != null)
+        {
+            _passengers = responsePassenger;
+        }
+    }
+
+    private async Task LoadPlanes()
+    {
+        var responsePlane = await Http.GetFromJsonAsync<List<Plane>>(planeUrl);
+        if (responsePlane != null)
+        {
+            _planes = responsePlane;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAirFlights();
+        await LoadPassengers();
+        await LoadPlanes();
+    }
+
+    private string departurePoint = "";
+    private string departurePoint2 = "";
+    private string arrivePoint =  "";
+    private int idFlight = 1;
+    private string planeModel = "";
+    private DateTime departure = new DateTime(2024, 1, 1);
+    private DateTime arrive = new DateTime(2025, 1, 1);
+
+    private async Task ClickHandler(int taskId)
+    {
+        switch (taskId)
+        {
+            case 1:
+                // departurePoint = GetFlightDeparturePoint(1);
+                // arrivePoint = GetFlightArrivePoint(1);
+
+                var response1 = await Http.GetFromJsonAsync<List<AirFlight>>("api/Request/FirstTask?departure=" + departurePoint + "&arrive=" + arrivePoint);
+                if (response1 != null)
+                {
+                    request1 = response1;
+                }
+                break;
+            case 2:
+                var response2 = await Http.GetFromJsonAsync<List<Passeneger>>("api/Request/SecondTask?idFlight=" + idFlight);
+                if (response2 != null)
+                {
+                    request2 = response2;
+                }
+                break;
+            case 3:
+                //planeModel = GetPlaneModel(1);
+                var response3 = await Http.GetFromJsonAsync<List<AirFlight>>("api/Request/ThirdTask?planeModel=" + planeModel + "&departure=" + departure + "&arrive=" + arrive);
+                if (response3 != null)
+                {
+                    request3 = response3;
+                }
+                break;
+            case 4:
+                var response4 = await Http.GetFromJsonAsync<List<AirFlightNumberPassangers>>("api/Request/FourthTask");
+                if (response4 != null)
+                {
+                    request4 = response4;
+                }
+                break;
+            case 5:
+                var response5 = await Http.GetFromJsonAsync<List<AirFlight>>("api/Request/FifthTask");
+                if (response5 != null)
+                {
+                    request5 = response5;
+                }
+                break;
+            case 6:
+                //departurePoint2 = GetFlightDeparturePoint(1);
+
+                var response6 = await Http.GetFromJsonAsync<List<double>>("api/Request/SixthTask?departure=" + departurePoint2);
+                if (response6 != null)
+                {
+                    request6 = response6;
+                }
+                break;
+        }
+    }
+
+    private void ClearTask(int taskId)
+    {
+        switch (taskId)
+        {
+            case 1:
+                request1 = null!;
+                break;
+            case 2:
+                request2 = null!;
+                break;
+            case 3:
+                request3 = null!;
+                break;
+            case 4:
+                request4 = null!;
+                break;
+            case 5:
+                request5 = null!;
+                break;
+            case 6:
+                request6 = null!;
+                break;
+        }
+    }
+
+    private string GetFlightCodeNumber(int flightId) => _airFlights?.FirstOrDefault(f => f.IdFlight == flightId)?.CodeNumber!;
+    private string GetFlightDeparturePoint(int flightId) => _airFlights?.FirstOrDefault(f => f.IdFlight == flightId)?.DeparturePoint!;
+    private DateTime? GetFlightDeparture(int flightId) => _airFlights?.FirstOrDefault(f => f.IdFlight == flightId)?.Departure!;
+    private string GetFlightArrivePoint(int flightId) => _airFlights?.FirstOrDefault(f => f.IdFlight == flightId)?.ArrivalPoint!;
+    private DateTime? GetFlightArrive(int flightId) => _airFlights?.FirstOrDefault(f => f.IdFlight == flightId)?.Arrive!;
+
+    private string GetPlaneModel(int planeId) => _planes?.FirstOrDefault(p => p.IdPlane == planeId)?.Model!;
+
+
+    private async Task CancelHandler()
+    {
+        await _modalRef!.Hide();
+        _errorMessage = "";
+    }
+}

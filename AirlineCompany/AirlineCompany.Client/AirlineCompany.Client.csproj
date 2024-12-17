@@ -8,10 +8,12 @@
 
 	<ItemGroup>
 		<None Remove="Components\Layout\NavMenu.razor.css" />
+		<None Remove="Components\Pages\Requests.razor.css" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="Components\Layout\NavMenu.razor.css" />
+		<Content Include="Components\Pages\Requests.razor.css" />
 	</ItemGroup>
 
   <ItemGroup>

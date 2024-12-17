@@ -94,3 +94,50 @@ main {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+
+::deep .data-header {
+    display: flex;
+    justify-content: space-around;
+    margin: 5px 0;
+    border-radius: 4px;
+    padding: 3px 0;
+    background-color: darkgrey;
+}
+
+::deep .data-row {
+    display: flex;
+    justify-content: space-around;
+    margin: 5px 0;
+}
+
+::deep .cell {
+    display: flex;
+    justify-content: center;
+    max-width: 210px;
+    width: 100%;
+    border: 1px solid #04173d;
+    border-radius: 4px;
+    align-items: center;
+}
+
+::deep .modal.show {
+    display: block;
+}
+
+::deep .input-with-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+::deep .modal-button {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    background-color: darkgrey;
+    font-size: 18px;
+    max-height: 38px;
+    margin: 0 5px;
+    border-radius: .25rem;
+}

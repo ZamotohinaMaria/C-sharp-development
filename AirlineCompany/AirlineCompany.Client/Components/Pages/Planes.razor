@@ -76,12 +76,6 @@
                 <label for="passengerMax">Максимальное число пассажиров</label>
                 <input type="int" id="passengerMax" @bind="newPlane.PassengerMax" class="form-control" />
             </div>
-            @*<select id="plane" @bind="newPlane.Plane.IdPlane">
-            @foreach (var plane in _planes)
-            {
-            <option value="@plane.IdPlane">@plane.IdPlane @plane.Model</option>
-            }
-            </select>*@
         </ModalBody>
 
         <ModalFooter>
@@ -129,7 +123,7 @@
     private async Task ShowUpdate(int planeId)
     {
         forAdd = false;
-        var response = await Http.GetFromJsonAsync<Plane>($"{planeUrl}/{newPlane}");
+        var response = await Http.GetFromJsonAsync<Plane>($"{planeUrl}/{planeId}");
         if (response != null)
         {
             newPlane = response;
@@ -173,10 +167,10 @@
         newPlane = new()
             {
                 IdPlane = 0,
-            Model = "M-0000",
-            LoadCapacity = 0,
-            Efficiency = 0,
-            PassengerMax = 0
+                Model = "M-0000",
+                LoadCapacity = 0,
+                Efficiency = 0,
+                PassengerMax = 0
             };
         await UpdateMainList();
         await modalRef!.Hide();
@@ -187,4 +181,6 @@
         await Http.DeleteAsync($"{planeUrl}/{newPlane}");
         await UpdateMainList();
     }
+
+
 }

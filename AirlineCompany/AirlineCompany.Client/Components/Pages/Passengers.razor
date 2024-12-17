@@ -92,12 +92,17 @@
                 <label for="idFlight">Номер рейса</label>
                 <input type="int" id="idFlight" @bind="newPassenger.IdFlight" class="form-control" />
             </div>
-            @*<select id="plane" @bind="newPassenger.Plane.IdPlane">
-            @foreach (var plane in _planes)
-            {
-            <option value="@plane.IdPlane">@plane.IdPlane @plane.Model</option>
-            }
-            </select>*@
+            <div class="mb-3">
+                <select id="flight" @bind="newPassenger.IdFlight">
+                    @foreach (var flight in _airFlights)
+                    {
+                        <option>@flight.IdFlight</option>
+                    }
+                </select>
+                <p class="form-control" style="border: none">Номер рейса: @GetFlightCodeNumber(newPassenger.IdFlight)</p>
+                <p class="form-control" style="border: none">Отправление: @GetFlightDeparturePoint(newPassenger.IdFlight) -> @GetFlightDeparture(newPassenger.IdFlight)</p>
+                <p class="form-control" style="border: none">Прибытие:  @GetFlightArrivePoint(newPassenger.IdFlight) -> @GetFlightArrive(newPassenger.IdFlight)</p>
+            </div>
         </ModalBody>
 
         <ModalFooter>
@@ -114,6 +119,8 @@
 
 @code {
     private List<Passeneger> _passengers = new();
+    private List<AirFlight> _airFlights = new();
+
 
     private Modal? modalRef = null!;
     private Passeneger newPassenger = new()
@@ -129,6 +136,17 @@
         };
     private bool forAdd = true;
     private string passengerUrl = "api/Passenger";
+    private string flightUrl = "api/AirFlight";
+
+
+    private async Task LoadAirFlights()
+    {
+        var responseFlight = await Http.GetFromJsonAsync<List<AirFlight>>(flightUrl);
+        if (responseFlight != null)
+        {
+            _airFlights = responseFlight;
+        }
+    }
 
     private async Task UpdateMainList()
     {
@@ -143,6 +161,7 @@
     protected override async Task OnInitializedAsync()
     {
         await UpdateMainList();
+        await LoadAirFlights();
     }
 
     private async Task ShowUpdate(int passengerId)
@@ -198,7 +217,7 @@
                 FullName = "Иванов Иван Иванович",
                 Passport = "4444 335566",
                 Registration = true,
-                TicketNumber = "10101010",
+                TicketNumber = "10101",
                 SeatNumber = "A00",
                 BaggageWeight = 0,
                 IdFlight = 0
@@ -212,4 +231,12 @@
         await Http.DeleteAsync($"{passengerUrl}/{passengerId}");
         await UpdateMainList();
     }
+
+    private string GetFlightCodeNumber(int flightId) => _airFlights?.FirstOrDefault(f => f.IdFlight == flightId)?.CodeNumber!;
+    private string GetFlightDeparturePoint(int flightId) => _airFlights?.FirstOrDefault(f => f.IdFlight == flightId)?.DeparturePoint!;
+    private DateTime? GetFlightDeparture(int flightId) => _airFlights?.FirstOrDefault(f => f.IdFlight == flightId)?.Departure!;
+    private string GetFlightArrivePoint(int flightId) => _airFlights?.FirstOrDefault(f => f.IdFlight == flightId)?.ArrivalPoint!;
+    private DateTime? GetFlightArrive(int flightId) => _airFlights?.FirstOrDefault(f => f.IdFlight == flightId)?.Arrive!;
+
+
 }
